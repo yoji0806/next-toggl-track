@@ -14,3 +14,8 @@
     - ローカルLLM
     - PC操作ログ（キーボード入力, マウス操作, 開いているファイル/ウィンドウ/タブ, 通信情報等々）
 
+# 参考： Toggl Track Autotarck
+現行のToggl TrackのAutotarckerは、ブラウザのタイトル or アプリ名のキーワード一致で各プロジェクト時間計測の開始/停止を行います。  
+この機能をより細かい粒度で完全自動で達成するのが最初の1歩です。
+
+<img width="720" alt="Autotracker_と_Toggl_Track_Desktop_App_for_macOS___Toggl_Track_Knowledge_Base" src="https://github.com/user-attachments/assets/231a5ba4-45ca-451c-8e25-4d58294a2b58" />
