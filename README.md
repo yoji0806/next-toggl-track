@@ -1,4 +1,4 @@
-# next-toggle-track
+# next-toggl-track
 
 完全自動で「何にどれだけ時間を使っているかを可視化する」ソフトウェア
 
