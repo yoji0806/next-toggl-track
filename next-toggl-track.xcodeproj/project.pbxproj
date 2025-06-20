@@ -7,62 +7,62 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		40D90EC32BA63BFD003DDD82 /* knowledge_creator_macApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D90EC22BA63BFD003DDD82 /* knowledge_creator_macApp.swift */; };
-		40D90EC52BA63BFD003DDD82 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D90EC42BA63BFD003DDD82 /* ContentView.swift */; };
-		40D90EC72BA63BFE003DDD82 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40D90EC62BA63BFE003DDD82 /* Assets.xcassets */; };
-		40D90ECA2BA63BFE003DDD82 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40D90EC92BA63BFE003DDD82 /* Preview Assets.xcassets */; };
-		40D90ED52BA63BFF003DDD82 /* knowledge_creator_macTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D90ED42BA63BFF003DDD82 /* knowledge_creator_macTests.swift */; };
-		40D90EDF2BA63BFF003DDD82 /* knowledge_creator_macUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D90EDE2BA63BFF003DDD82 /* knowledge_creator_macUITests.swift */; };
-		40D90EE12BA63BFF003DDD82 /* knowledge_creator_macUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D90EE02BA63BFF003DDD82 /* knowledge_creator_macUITestsLaunchTests.swift */; };
+		40156EB62E05971C0082B78D /* next_toggl_trackApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40156EB52E05971C0082B78D /* next_toggl_trackApp.swift */; };
+		40156EB82E05971C0082B78D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40156EB72E05971C0082B78D /* ContentView.swift */; };
+		40156EBA2E05971D0082B78D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40156EB92E05971D0082B78D /* Assets.xcassets */; };
+		40156EBD2E05971D0082B78D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40156EBC2E05971D0082B78D /* Preview Assets.xcassets */; };
+		40156EC82E05971E0082B78D /* next_toggl_trackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40156EC72E05971E0082B78D /* next_toggl_trackTests.swift */; };
+		40156ED22E05971E0082B78D /* next_toggl_trackUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40156ED12E05971E0082B78D /* next_toggl_trackUITests.swift */; };
+		40156ED42E05971E0082B78D /* next_toggl_trackUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40156ED32E05971E0082B78D /* next_toggl_trackUITestsLaunchTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		40D90ED12BA63BFF003DDD82 /* PBXContainerItemProxy */ = {
+		40156EC42E05971E0082B78D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 40D90EB72BA63BFD003DDD82 /* Project object */;
+			containerPortal = 40156EAA2E05971C0082B78D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 40D90EBE2BA63BFD003DDD82;
-			remoteInfo = knowledge_creator_mac;
+			remoteGlobalIDString = 40156EB12E05971C0082B78D;
+			remoteInfo = "next-toggl-track";
 		};
-		40D90EDB2BA63BFF003DDD82 /* PBXContainerItemProxy */ = {
+		40156ECE2E05971E0082B78D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 40D90EB72BA63BFD003DDD82 /* Project object */;
+			containerPortal = 40156EAA2E05971C0082B78D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 40D90EBE2BA63BFD003DDD82;
-			remoteInfo = knowledge_creator_mac;
+			remoteGlobalIDString = 40156EB12E05971C0082B78D;
+			remoteInfo = "next-toggl-track";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		40D90EBF2BA63BFD003DDD82 /* knowledge_creator_mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = knowledge_creator_mac.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		40D90EC22BA63BFD003DDD82 /* knowledge_creator_macApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = knowledge_creator_macApp.swift; sourceTree = "<group>"; };
-		40D90EC42BA63BFD003DDD82 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		40D90EC62BA63BFE003DDD82 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		40D90EC92BA63BFE003DDD82 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		40D90ECB2BA63BFE003DDD82 /* knowledge_creator_mac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = knowledge_creator_mac.entitlements; sourceTree = "<group>"; };
-		40D90ED02BA63BFF003DDD82 /* knowledge_creator_macTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = knowledge_creator_macTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		40D90ED42BA63BFF003DDD82 /* knowledge_creator_macTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = knowledge_creator_macTests.swift; sourceTree = "<group>"; };
-		40D90EDA2BA63BFF003DDD82 /* knowledge_creator_macUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = knowledge_creator_macUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		40D90EDE2BA63BFF003DDD82 /* knowledge_creator_macUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = knowledge_creator_macUITests.swift; sourceTree = "<group>"; };
-		40D90EE02BA63BFF003DDD82 /* knowledge_creator_macUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = knowledge_creator_macUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		40156EB22E05971C0082B78D /* next-toggl-track.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "next-toggl-track.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		40156EB52E05971C0082B78D /* next_toggl_trackApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = next_toggl_trackApp.swift; sourceTree = "<group>"; };
+		40156EB72E05971C0082B78D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		40156EB92E05971D0082B78D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		40156EBC2E05971D0082B78D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		40156EBE2E05971D0082B78D /* next_toggl_track.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = next_toggl_track.entitlements; sourceTree = "<group>"; };
+		40156EC32E05971E0082B78D /* next-toggl-trackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "next-toggl-trackTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		40156EC72E05971E0082B78D /* next_toggl_trackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = next_toggl_trackTests.swift; sourceTree = "<group>"; };
+		40156ECD2E05971E0082B78D /* next-toggl-trackUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "next-toggl-trackUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		40156ED12E05971E0082B78D /* next_toggl_trackUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = next_toggl_trackUITests.swift; sourceTree = "<group>"; };
+		40156ED32E05971E0082B78D /* next_toggl_trackUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = next_toggl_trackUITestsLaunchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		40D90EBC2BA63BFD003DDD82 /* Frameworks */ = {
+		40156EAF2E05971C0082B78D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		40D90ECD2BA63BFF003DDD82 /* Frameworks */ = {
+		40156EC02E05971E0082B78D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		40D90ED72BA63BFF003DDD82 /* Frameworks */ = {
+		40156ECA2E05971E0082B78D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -72,143 +72,143 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		40D90EB62BA63BFD003DDD82 = {
+		40156EA92E05971C0082B78D = {
 			isa = PBXGroup;
 			children = (
-				40D90EC12BA63BFD003DDD82 /* knowledge_creator_mac */,
-				40D90ED32BA63BFF003DDD82 /* knowledge_creator_macTests */,
-				40D90EDD2BA63BFF003DDD82 /* knowledge_creator_macUITests */,
-				40D90EC02BA63BFD003DDD82 /* Products */,
+				40156EB42E05971C0082B78D /* next-toggl-track */,
+				40156EC62E05971E0082B78D /* next-toggl-trackTests */,
+				40156ED02E05971E0082B78D /* next-toggl-trackUITests */,
+				40156EB32E05971C0082B78D /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		40D90EC02BA63BFD003DDD82 /* Products */ = {
+		40156EB32E05971C0082B78D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				40D90EBF2BA63BFD003DDD82 /* knowledge_creator_mac.app */,
-				40D90ED02BA63BFF003DDD82 /* knowledge_creator_macTests.xctest */,
-				40D90EDA2BA63BFF003DDD82 /* knowledge_creator_macUITests.xctest */,
+				40156EB22E05971C0082B78D /* next-toggl-track.app */,
+				40156EC32E05971E0082B78D /* next-toggl-trackTests.xctest */,
+				40156ECD2E05971E0082B78D /* next-toggl-trackUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		40D90EC12BA63BFD003DDD82 /* knowledge_creator_mac */ = {
+		40156EB42E05971C0082B78D /* next-toggl-track */ = {
 			isa = PBXGroup;
 			children = (
-				40D90EC22BA63BFD003DDD82 /* knowledge_creator_macApp.swift */,
-				40D90EC42BA63BFD003DDD82 /* ContentView.swift */,
-				40D90EC62BA63BFE003DDD82 /* Assets.xcassets */,
-				40D90ECB2BA63BFE003DDD82 /* knowledge_creator_mac.entitlements */,
-				40D90EC82BA63BFE003DDD82 /* Preview Content */,
+				40156EB52E05971C0082B78D /* next_toggl_trackApp.swift */,
+				40156EB72E05971C0082B78D /* ContentView.swift */,
+				40156EB92E05971D0082B78D /* Assets.xcassets */,
+				40156EBE2E05971D0082B78D /* next_toggl_track.entitlements */,
+				40156EBB2E05971D0082B78D /* Preview Content */,
 			);
-			path = knowledge_creator_mac;
+			path = "next-toggl-track";
 			sourceTree = "<group>";
 		};
-		40D90EC82BA63BFE003DDD82 /* Preview Content */ = {
+		40156EBB2E05971D0082B78D /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				40D90EC92BA63BFE003DDD82 /* Preview Assets.xcassets */,
+				40156EBC2E05971D0082B78D /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		40D90ED32BA63BFF003DDD82 /* knowledge_creator_macTests */ = {
+		40156EC62E05971E0082B78D /* next-toggl-trackTests */ = {
 			isa = PBXGroup;
 			children = (
-				40D90ED42BA63BFF003DDD82 /* knowledge_creator_macTests.swift */,
+				40156EC72E05971E0082B78D /* next_toggl_trackTests.swift */,
 			);
-			path = knowledge_creator_macTests;
+			path = "next-toggl-trackTests";
 			sourceTree = "<group>";
 		};
-		40D90EDD2BA63BFF003DDD82 /* knowledge_creator_macUITests */ = {
+		40156ED02E05971E0082B78D /* next-toggl-trackUITests */ = {
 			isa = PBXGroup;
 			children = (
-				40D90EDE2BA63BFF003DDD82 /* knowledge_creator_macUITests.swift */,
-				40D90EE02BA63BFF003DDD82 /* knowledge_creator_macUITestsLaunchTests.swift */,
+				40156ED12E05971E0082B78D /* next_toggl_trackUITests.swift */,
+				40156ED32E05971E0082B78D /* next_toggl_trackUITestsLaunchTests.swift */,
 			);
-			path = knowledge_creator_macUITests;
+			path = "next-toggl-trackUITests";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		40D90EBE2BA63BFD003DDD82 /* knowledge_creator_mac */ = {
+		40156EB12E05971C0082B78D /* next-toggl-track */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 40D90EE42BA63BFF003DDD82 /* Build configuration list for PBXNativeTarget "knowledge_creator_mac" */;
+			buildConfigurationList = 40156ED72E05971E0082B78D /* Build configuration list for PBXNativeTarget "next-toggl-track" */;
 			buildPhases = (
-				40D90EBB2BA63BFD003DDD82 /* Sources */,
-				40D90EBC2BA63BFD003DDD82 /* Frameworks */,
-				40D90EBD2BA63BFD003DDD82 /* Resources */,
+				40156EAE2E05971C0082B78D /* Sources */,
+				40156EAF2E05971C0082B78D /* Frameworks */,
+				40156EB02E05971C0082B78D /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = knowledge_creator_mac;
-			productName = knowledge_creator_mac;
-			productReference = 40D90EBF2BA63BFD003DDD82 /* knowledge_creator_mac.app */;
+			name = "next-toggl-track";
+			productName = "next-toggl-track";
+			productReference = 40156EB22E05971C0082B78D /* next-toggl-track.app */;
 			productType = "com.apple.product-type.application";
 		};
-		40D90ECF2BA63BFF003DDD82 /* knowledge_creator_macTests */ = {
+		40156EC22E05971E0082B78D /* next-toggl-trackTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 40D90EE72BA63BFF003DDD82 /* Build configuration list for PBXNativeTarget "knowledge_creator_macTests" */;
+			buildConfigurationList = 40156EDA2E05971E0082B78D /* Build configuration list for PBXNativeTarget "next-toggl-trackTests" */;
 			buildPhases = (
-				40D90ECC2BA63BFF003DDD82 /* Sources */,
-				40D90ECD2BA63BFF003DDD82 /* Frameworks */,
-				40D90ECE2BA63BFF003DDD82 /* Resources */,
+				40156EBF2E05971E0082B78D /* Sources */,
+				40156EC02E05971E0082B78D /* Frameworks */,
+				40156EC12E05971E0082B78D /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				40D90ED22BA63BFF003DDD82 /* PBXTargetDependency */,
+				40156EC52E05971E0082B78D /* PBXTargetDependency */,
 			);
-			name = knowledge_creator_macTests;
-			productName = knowledge_creator_macTests;
-			productReference = 40D90ED02BA63BFF003DDD82 /* knowledge_creator_macTests.xctest */;
+			name = "next-toggl-trackTests";
+			productName = "next-toggl-trackTests";
+			productReference = 40156EC32E05971E0082B78D /* next-toggl-trackTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		40D90ED92BA63BFF003DDD82 /* knowledge_creator_macUITests */ = {
+		40156ECC2E05971E0082B78D /* next-toggl-trackUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 40D90EEA2BA63BFF003DDD82 /* Build configuration list for PBXNativeTarget "knowledge_creator_macUITests" */;
+			buildConfigurationList = 40156EDD2E05971E0082B78D /* Build configuration list for PBXNativeTarget "next-toggl-trackUITests" */;
 			buildPhases = (
-				40D90ED62BA63BFF003DDD82 /* Sources */,
-				40D90ED72BA63BFF003DDD82 /* Frameworks */,
-				40D90ED82BA63BFF003DDD82 /* Resources */,
+				40156EC92E05971E0082B78D /* Sources */,
+				40156ECA2E05971E0082B78D /* Frameworks */,
+				40156ECB2E05971E0082B78D /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				40D90EDC2BA63BFF003DDD82 /* PBXTargetDependency */,
+				40156ECF2E05971E0082B78D /* PBXTargetDependency */,
 			);
-			name = knowledge_creator_macUITests;
-			productName = knowledge_creator_macUITests;
-			productReference = 40D90EDA2BA63BFF003DDD82 /* knowledge_creator_macUITests.xctest */;
+			name = "next-toggl-trackUITests";
+			productName = "next-toggl-trackUITests";
+			productReference = 40156ECD2E05971E0082B78D /* next-toggl-trackUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		40D90EB72BA63BFD003DDD82 /* Project object */ = {
+		40156EAA2E05971C0082B78D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1520;
-				LastUpgradeCheck = 1520;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
 				TargetAttributes = {
-					40D90EBE2BA63BFD003DDD82 = {
-						CreatedOnToolsVersion = 15.2;
+					40156EB12E05971C0082B78D = {
+						CreatedOnToolsVersion = 15.4;
 					};
-					40D90ECF2BA63BFF003DDD82 = {
-						CreatedOnToolsVersion = 15.2;
-						TestTargetID = 40D90EBE2BA63BFD003DDD82;
+					40156EC22E05971E0082B78D = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 40156EB12E05971C0082B78D;
 					};
-					40D90ED92BA63BFF003DDD82 = {
-						CreatedOnToolsVersion = 15.2;
-						TestTargetID = 40D90EBE2BA63BFD003DDD82;
+					40156ECC2E05971E0082B78D = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 40156EB12E05971C0082B78D;
 					};
 				};
 			};
-			buildConfigurationList = 40D90EBA2BA63BFD003DDD82 /* Build configuration list for PBXProject "knowledge_creator_mac" */;
+			buildConfigurationList = 40156EAD2E05971C0082B78D /* Build configuration list for PBXProject "next-toggl-track" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -216,36 +216,36 @@
 				en,
 				Base,
 			);
-			mainGroup = 40D90EB62BA63BFD003DDD82;
-			productRefGroup = 40D90EC02BA63BFD003DDD82 /* Products */;
+			mainGroup = 40156EA92E05971C0082B78D;
+			productRefGroup = 40156EB32E05971C0082B78D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				40D90EBE2BA63BFD003DDD82 /* knowledge_creator_mac */,
-				40D90ECF2BA63BFF003DDD82 /* knowledge_creator_macTests */,
-				40D90ED92BA63BFF003DDD82 /* knowledge_creator_macUITests */,
+				40156EB12E05971C0082B78D /* next-toggl-track */,
+				40156EC22E05971E0082B78D /* next-toggl-trackTests */,
+				40156ECC2E05971E0082B78D /* next-toggl-trackUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		40D90EBD2BA63BFD003DDD82 /* Resources */ = {
+		40156EB02E05971C0082B78D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				40D90ECA2BA63BFE003DDD82 /* Preview Assets.xcassets in Resources */,
-				40D90EC72BA63BFE003DDD82 /* Assets.xcassets in Resources */,
+				40156EBD2E05971D0082B78D /* Preview Assets.xcassets in Resources */,
+				40156EBA2E05971D0082B78D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		40D90ECE2BA63BFF003DDD82 /* Resources */ = {
+		40156EC12E05971E0082B78D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		40D90ED82BA63BFF003DDD82 /* Resources */ = {
+		40156ECB2E05971E0082B78D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -255,49 +255,49 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		40D90EBB2BA63BFD003DDD82 /* Sources */ = {
+		40156EAE2E05971C0082B78D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				40D90EC52BA63BFD003DDD82 /* ContentView.swift in Sources */,
-				40D90EC32BA63BFD003DDD82 /* knowledge_creator_macApp.swift in Sources */,
+				40156EB82E05971C0082B78D /* ContentView.swift in Sources */,
+				40156EB62E05971C0082B78D /* next_toggl_trackApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		40D90ECC2BA63BFF003DDD82 /* Sources */ = {
+		40156EBF2E05971E0082B78D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				40D90ED52BA63BFF003DDD82 /* knowledge_creator_macTests.swift in Sources */,
+				40156EC82E05971E0082B78D /* next_toggl_trackTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		40D90ED62BA63BFF003DDD82 /* Sources */ = {
+		40156EC92E05971E0082B78D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				40D90EE12BA63BFF003DDD82 /* knowledge_creator_macUITestsLaunchTests.swift in Sources */,
-				40D90EDF2BA63BFF003DDD82 /* knowledge_creator_macUITests.swift in Sources */,
+				40156ED22E05971E0082B78D /* next_toggl_trackUITests.swift in Sources */,
+				40156ED42E05971E0082B78D /* next_toggl_trackUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		40D90ED22BA63BFF003DDD82 /* PBXTargetDependency */ = {
+		40156EC52E05971E0082B78D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 40D90EBE2BA63BFD003DDD82 /* knowledge_creator_mac */;
-			targetProxy = 40D90ED12BA63BFF003DDD82 /* PBXContainerItemProxy */;
+			target = 40156EB12E05971C0082B78D /* next-toggl-track */;
+			targetProxy = 40156EC42E05971E0082B78D /* PBXContainerItemProxy */;
 		};
-		40D90EDC2BA63BFF003DDD82 /* PBXTargetDependency */ = {
+		40156ECF2E05971E0082B78D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 40D90EBE2BA63BFD003DDD82 /* knowledge_creator_mac */;
-			targetProxy = 40D90EDB2BA63BFF003DDD82 /* PBXContainerItemProxy */;
+			target = 40156EB12E05971C0082B78D /* next-toggl-track */;
+			targetProxy = 40156ECE2E05971E0082B78D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		40D90EE22BA63BFF003DDD82 /* Debug */ = {
+		40156ED52E05971E0082B78D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -350,7 +350,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MACOSX_DEPLOYMENT_TARGET = 14.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -360,7 +360,7 @@
 			};
 			name = Debug;
 		};
-		40D90EE32BA63BFF003DDD82 /* Release */ = {
+		40156ED62E05971E0082B78D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -407,7 +407,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MACOSX_DEPLOYMENT_TARGET = 14.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -415,16 +415,16 @@
 			};
 			name = Release;
 		};
-		40D90EE52BA63BFF003DDD82 /* Debug */ = {
+		40156ED82E05971E0082B78D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = knowledge_creator_mac/knowledge_creator_mac.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "next-toggl-track/next_toggl_track.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"knowledge_creator_mac/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"next-toggl-track/Preview Content\"";
 				DEVELOPMENT_TEAM = K7SDKKJUJ2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -435,23 +435,23 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yojiyamamoto.knowledge-creator-mac";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yojiyamamoto.next-toggl-track";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		40D90EE62BA63BFF003DDD82 /* Release */ = {
+		40156ED92E05971E0082B78D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = knowledge_creator_mac/knowledge_creator_mac.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "next-toggl-track/next_toggl_track.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"knowledge_creator_mac/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"next-toggl-track/Preview Content\"";
 				DEVELOPMENT_TEAM = K7SDKKJUJ2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -462,14 +462,14 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yojiyamamoto.knowledge-creator-mac";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yojiyamamoto.next-toggl-track";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
-		40D90EE82BA63BFF003DDD82 /* Debug */ = {
+		40156EDB2E05971E0082B78D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -478,17 +478,17 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = K7SDKKJUJ2;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MACOSX_DEPLOYMENT_TARGET = 14.3;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yojiyamamoto.knowledge-creator-macTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yojiyamamoto.next-toggl-trackTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/knowledge_creator_mac.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/knowledge_creator_mac";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/next-toggl-track.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/next-toggl-track";
 			};
 			name = Debug;
 		};
-		40D90EE92BA63BFF003DDD82 /* Release */ = {
+		40156EDC2E05971E0082B78D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -497,17 +497,17 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = K7SDKKJUJ2;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MACOSX_DEPLOYMENT_TARGET = 14.3;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yojiyamamoto.knowledge-creator-macTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yojiyamamoto.next-toggl-trackTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/knowledge_creator_mac.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/knowledge_creator_mac";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/next-toggl-track.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/next-toggl-track";
 			};
 			name = Release;
 		};
-		40D90EEB2BA63BFF003DDD82 /* Debug */ = {
+		40156EDE2E05971E0082B78D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -516,15 +516,15 @@
 				DEVELOPMENT_TEAM = K7SDKKJUJ2;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yojiyamamoto.knowledge-creator-macUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yojiyamamoto.next-toggl-trackUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = knowledge_creator_mac;
+				TEST_TARGET_NAME = "next-toggl-track";
 			};
 			name = Debug;
 		};
-		40D90EEC2BA63BFF003DDD82 /* Release */ = {
+		40156EDF2E05971E0082B78D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -533,54 +533,54 @@
 				DEVELOPMENT_TEAM = K7SDKKJUJ2;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yojiyamamoto.knowledge-creator-macUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yojiyamamoto.next-toggl-trackUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = knowledge_creator_mac;
+				TEST_TARGET_NAME = "next-toggl-track";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		40D90EBA2BA63BFD003DDD82 /* Build configuration list for PBXProject "knowledge_creator_mac" */ = {
+		40156EAD2E05971C0082B78D /* Build configuration list for PBXProject "next-toggl-track" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				40D90EE22BA63BFF003DDD82 /* Debug */,
-				40D90EE32BA63BFF003DDD82 /* Release */,
+				40156ED52E05971E0082B78D /* Debug */,
+				40156ED62E05971E0082B78D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		40D90EE42BA63BFF003DDD82 /* Build configuration list for PBXNativeTarget "knowledge_creator_mac" */ = {
+		40156ED72E05971E0082B78D /* Build configuration list for PBXNativeTarget "next-toggl-track" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				40D90EE52BA63BFF003DDD82 /* Debug */,
-				40D90EE62BA63BFF003DDD82 /* Release */,
+				40156ED82E05971E0082B78D /* Debug */,
+				40156ED92E05971E0082B78D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		40D90EE72BA63BFF003DDD82 /* Build configuration list for PBXNativeTarget "knowledge_creator_macTests" */ = {
+		40156EDA2E05971E0082B78D /* Build configuration list for PBXNativeTarget "next-toggl-trackTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				40D90EE82BA63BFF003DDD82 /* Debug */,
-				40D90EE92BA63BFF003DDD82 /* Release */,
+				40156EDB2E05971E0082B78D /* Debug */,
+				40156EDC2E05971E0082B78D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		40D90EEA2BA63BFF003DDD82 /* Build configuration list for PBXNativeTarget "knowledge_creator_macUITests" */ = {
+		40156EDD2E05971E0082B78D /* Build configuration list for PBXNativeTarget "next-toggl-trackUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				40D90EEB2BA63BFF003DDD82 /* Debug */,
-				40D90EEC2BA63BFF003DDD82 /* Release */,
+				40156EDE2E05971E0082B78D /* Debug */,
+				40156EDF2E05971E0082B78D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 40D90EB72BA63BFD003DDD82 /* Project object */;
+	rootObject = 40156EAA2E05971C0082B78D /* Project object */;
 }

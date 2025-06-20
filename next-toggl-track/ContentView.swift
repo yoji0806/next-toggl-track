@@ -1,8 +1,8 @@
 //
 //  ContentView.swift
-//  knowledge_creator_mac
+//  next-toggl-track
 //
-//  Created by 山本燿司 on 2024/03/17.
+//  Created by 山本燿司 on 2025/06/20.
 //
 
 import SwiftUI
@@ -10,7 +10,7 @@ import Cocoa
 
 struct ContentView: View {
     
-    @ObservedObject var textInput = InputText()
+    @StateObject var textInput = InputText()
     @State var textIntermediate: String = "intermediate"
     @State var textOutput: String = "output"
 
@@ -26,7 +26,6 @@ struct ContentView: View {
         }
         .onAppear {
             print("onApper!")
-            //let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: true]
             let options = [kAXTrustedCheckOptionPrompt.takeRetainedValue(): true] as CFDictionary
             let accessEnabled = AXIsProcessTrustedWithOptions(options)
             let isTrusted = AXIsProcessTrusted()

@@ -1,13 +1,13 @@
 //
-//  knowledge_creator_macUITests.swift
-//  knowledge_creator_macUITests
+//  next_toggl_trackUITests.swift
+//  next-toggl-trackUITests
 //
-//  Created by 山本燿司 on 2024/03/17.
+//  Created by 山本燿司 on 2025/06/20.
 //
 
 import XCTest
 
-final class knowledge_creator_macUITests: XCTestCase {
+final class next_toggl_trackUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

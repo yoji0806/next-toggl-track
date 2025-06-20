@@ -1,13 +1,13 @@
 //
-//  knowledge_creator_macUITestsLaunchTests.swift
-//  knowledge_creator_macUITests
+//  next_toggl_trackUITestsLaunchTests.swift
+//  next-toggl-trackUITests
 //
-//  Created by 山本燿司 on 2024/03/17.
+//  Created by 山本燿司 on 2025/06/20.
 //
 
 import XCTest
 
-final class knowledge_creator_macUITestsLaunchTests: XCTestCase {
+final class next_toggl_trackUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
