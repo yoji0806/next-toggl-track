@@ -48,6 +48,10 @@ struct ContentView: View {
             // ContentViewが表示されるときにKeyboardMonitorを初期化する
             let monitor = KeyboardMonitor(textInput: textInput)
             monitor.startMonitoring()
+
+            // フォーカス変更を監視する
+            let focusMonitor = FocusMonitor(textInput: textInput)
+            focusMonitor.startMonitoring()
         }
     }
 }
@@ -162,5 +166,28 @@ class KeyboardMonitor: NSObject {
             }
         
         })
+    }
+}
+
+class FocusMonitor: NSObject {
+
+    var textInput: InputText
+
+    init(textInput: InputText) {
+        self.textInput = textInput
+    }
+
+    func startMonitoring() {
+        NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didActivateApplicationNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            if let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication {
+                let name = app.localizedName ?? "unknown"
+                print("Focus: \(name)")
+                self?.textInput.data += "【focus: \(name)】"
+            }
+        }
     }
 }
