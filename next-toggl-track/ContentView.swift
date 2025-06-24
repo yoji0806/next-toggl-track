@@ -13,6 +13,9 @@ struct ContentView: View {
     @StateObject var textInput = InputText()
     @State var textIntermediate: String = "intermediate"
     @State var textOutput: String = "output"
+    
+    @State var focusMonitor: FocusMonitor?
+
 
     var body: some View {
         NavigationView{
@@ -50,8 +53,8 @@ struct ContentView: View {
             monitor.startMonitoring()
 
             // フォーカス変更を監視する
-            let focusMonitor = FocusMonitor(textInput: textInput)
-            focusMonitor.startMonitoring()
+            focusMonitor = FocusMonitor(textInput: textInput)
+            focusMonitor?.startMonitoring()
         }
     }
 }
@@ -186,7 +189,10 @@ class FocusMonitor: NSObject {
             if let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication {
                 let name = app.localizedName ?? "unknown"
                 print("Focus: \(name)")
-                self?.textInput.data += "【focus: \(name)】"
+                
+                DispatchQueue.main.async {
+                    self?.textInput.data += "【focus: \(name)】"
+                }
             }
         }
     }
