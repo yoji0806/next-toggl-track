@@ -114,7 +114,10 @@ class InputText: ObservableObject {
         let fileName = df.string(from: Date()) + ".txt"
 
         let fileManager = FileManager.default
-        let directory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let directory = fileManager.urls(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask
+        )[0].appendingPathComponent("next-toggl-track")
         let fileURL = directory.appendingPathComponent(fileName)
         
         print("fileURL:\(fileURL)")
