@@ -91,7 +91,10 @@ class InputText: ObservableObject {
 
     /// Append a new log entry
     func appendLog(eventType: String, content: String) {
-        let df = ISO8601DateFormatter()
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        df.locale = Locale.current
+        df.timeZone = TimeZone.current
         let timestamp = df.string(from: Date())
         let line = "\(timestamp), \(eventType), \(content)"
         logQueue.append(line)
@@ -99,7 +102,12 @@ class InputText: ObservableObject {
 
     /// Flush queued logs to the daily file
     func flushLog() {
-        guard !logQueue.isEmpty else { return }
+        guard !logQueue.isEmpty else {
+            print("logQueueが空なので無視")
+            return
+        }
+        
+        print("logQueueが空じゃないので以下を実行！")
 
         let df = DateFormatter()
         df.dateFormat = "yyyyMMdd"
@@ -108,6 +116,8 @@ class InputText: ObservableObject {
         let fileManager = FileManager.default
         let directory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileURL = directory.appendingPathComponent(fileName)
+        
+        print("fileURL:\(fileURL)")
 
         let text = logQueue.joined(separator: "\n") + "\n"
         logQueue.removeAll()
