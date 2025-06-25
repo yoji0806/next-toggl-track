@@ -29,6 +29,8 @@ struct ContentView: View {
         }
         .onAppear {
             print("onApper!")
+            textInput.appendLog(eventType: "app", content: "起動")
+            
             let options = [kAXTrustedCheckOptionPrompt.takeRetainedValue(): true] as CFDictionary
             let accessEnabled = AXIsProcessTrustedWithOptions(options)
             let isTrusted = AXIsProcessTrusted()
@@ -73,6 +75,71 @@ struct Sidebar: View {
 
 class InputText: ObservableObject {
     @Published var data: String = "input"
+
+    /// Queue for storing log lines before writing to disk
+    var logQueue: [String] = []
+    private var timer: Timer?
+
+    init() {
+        // Start timer to flush logs to disk every 10 seconds
+        timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
+            self?.flushLog()
+        }
+    }
+
+    deinit {
+        timer?.invalidate()
+    }
+
+    /// Append a new log entry
+    func appendLog(eventType: String, content: String) {
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        df.locale = Locale.current
+        df.timeZone = TimeZone.current
+        let timestamp = df.string(from: Date())
+        let line = "\(timestamp), \(eventType), \(content)"
+        logQueue.append(line)
+    }
+
+    /// Flush queued logs to the daily file
+    func flushLog() {
+        guard !logQueue.isEmpty else {
+            print("logQueueが空なので無視")
+            return
+        }
+        
+        print("logQueueが空じゃないので以下を実行！")
+
+        let df = DateFormatter()
+        df.dateFormat = "yyyyMMdd"
+        let fileName = df.string(from: Date()) + ".txt"
+
+        let fileManager = FileManager.default
+        let directory = fileManager.urls(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask
+        )[0].appendingPathComponent("next-toggl-track")
+        let fileURL = directory.appendingPathComponent(fileName)
+        
+        print("fileURL:\(fileURL)")
+
+        let text = logQueue.joined(separator: "\n") + "\n"
+        logQueue.removeAll()
+
+        if let data = text.data(using: .utf8) {
+            if fileManager.fileExists(atPath: fileURL.path) {
+                if let handle = try? FileHandle(forWritingTo: fileURL) {
+                    handle.seekToEndOfFile()
+                    handle.write(data)
+                    try? handle.close()
+                }
+            } else {
+                try? fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
+                try? data.write(to: fileURL)
+            }
+        }
+    }
 }
 
 
@@ -166,6 +233,7 @@ class KeyboardMonitor: NSObject {
             
             DispatchQueue.main.async {
                 self.textInput.data += action
+                self.textInput.appendLog(eventType: String(describing: event.type), content: action)
             }
         
         })
@@ -192,6 +260,7 @@ class FocusMonitor: NSObject {
                 
                 DispatchQueue.main.async {
                     self?.textInput.data += "【focus: \(name)】"
+                    self?.textInput.appendLog(eventType: "focus", content: name)
                 }
             }
         }
