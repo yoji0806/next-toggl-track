@@ -21,9 +21,9 @@ struct ContentView: View {
         NavigationView{
             Sidebar()
             HStack {
-                TextEditor(text: $textInput.data)
-                TextEditor(text: $textIntermediate)
-                TextEditor(text: $textOutput)
+                AutoScrollingTextEditor(text: $textInput.data)
+                AutoScrollingTextEditor(text: $textIntermediate)
+                AutoScrollingTextEditor(text: $textOutput)
                 Button{ print("button is clicked!") } label: {}
             }
         }
@@ -194,6 +194,51 @@ class FocusMonitor: NSObject {
                     self?.textInput.data += "【focus: \(name)】"
                 }
             }
+        }
+    }
+}
+
+struct AutoScrollingTextEditor: NSViewRepresentable {
+    @Binding var text: String
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
+
+    func makeNSView(context: Context) -> NSScrollView {
+        let textView = NSTextView()
+        textView.isEditable = true
+        textView.isSelectable = true
+        textView.font = NSFont.monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
+        textView.delegate = context.coordinator
+        textView.isVerticallyResizable = true
+        textView.isHorizontallyResizable = false
+        textView.textContainer?.widthTracksTextView = true
+
+        let scrollView = NSScrollView()
+        scrollView.hasVerticalScroller = true
+        scrollView.documentView = textView
+        return scrollView
+    }
+
+    func updateNSView(_ nsView: NSScrollView, context: Context) {
+        guard let textView = nsView.documentView as? NSTextView else { return }
+        if textView.string != text {
+            textView.string = text
+        }
+        textView.scrollToEndOfDocument(nil)
+    }
+
+    class Coordinator: NSObject, NSTextViewDelegate {
+        var parent: AutoScrollingTextEditor
+        init(parent: AutoScrollingTextEditor) {
+            self.parent = parent
+        }
+
+        func textDidChange(_ notification: Notification) {
+            guard let textView = notification.object as? NSTextView else { return }
+            parent.text = textView.string
+            textView.scrollToEndOfDocument(nil)
         }
     }
 }
