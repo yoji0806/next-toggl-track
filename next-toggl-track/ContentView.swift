@@ -29,6 +29,8 @@ struct ContentView: View {
         }
         .onAppear {
             print("onApper!")
+            textInput.appendLog(eventType: "app", content: "起動")
+            
             let options = [kAXTrustedCheckOptionPrompt.takeRetainedValue(): true] as CFDictionary
             let accessEnabled = AXIsProcessTrustedWithOptions(options)
             let isTrusted = AXIsProcessTrusted()
