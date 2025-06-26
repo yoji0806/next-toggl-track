@@ -1,5 +1,7 @@
 import Cocoa
 
+// FocusMonitor that detects the focus and
+
 class FocusMonitor: NSObject {
 
     var textInput: InputText
@@ -16,7 +18,7 @@ class FocusMonitor: NSObject {
         ) { [weak self] notification in
             if let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication {
                 let name = app.localizedName ?? "unknown"
-                print("Focus: \(name)")
+                logger.debug("Focus: \(name)")
 
                 DispatchQueue.main.async {
                     self?.textInput.data += "【focus: \(name)】"

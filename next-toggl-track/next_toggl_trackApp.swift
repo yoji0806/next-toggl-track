@@ -6,6 +6,11 @@
 //
 
 import SwiftUI
+import os
+
+let logger = Logger(subsystem: "com.yojiyamamoto.next-toggl-track", category: "logging")
+// level: [debug, info, notice, warning, error, fault]
+
 
 @main
 struct next_toggl_trackApp: App {

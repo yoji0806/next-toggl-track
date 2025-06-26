@@ -1,4 +1,6 @@
 import Cocoa
+//KeyboardMonitor that recognizes keyboard + mousepad input
+
 
 class KeyboardMonitor: NSObject {
 
@@ -25,10 +27,8 @@ class KeyboardMonitor: NSObject {
 
         if event.type == .leftMouseDown {
             action = "【l_click】"
-            print("Click: left")
         } else if event.type == .rightMouseDown {
             action = "【r_click】"
-            print("Click: right")
         } else if event.type == .keyDown {
             switch event.modifierFlags.rawValue {
             case 256:   //character or Enter or Space
@@ -91,11 +91,10 @@ class KeyboardMonitor: NSObject {
 
             default: action = "【unknown Flags char:\(event.characters ?? "") keycode:\(event.keyCode)】 specialKey:\(event.specialKey?.rawValue)"
             }
-            print("Input: \(event.characters)  KeyCode:\(event.keyCode)   Flag:\(event.modifierFlags.rawValue) SpecialKey:\(event.specialKey?.rawValue)")
         } else {
             action = "unknown"
         }
-
+        logger.debug("\(action)")
         return action
     }
 }

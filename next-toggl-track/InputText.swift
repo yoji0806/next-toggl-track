@@ -1,6 +1,9 @@
 import Foundation
 import SwiftUI
 
+///InputText with a scheduled logger
+
+
 class InputText: ObservableObject {
     @Published var data: String = "input"
 
@@ -33,11 +36,11 @@ class InputText: ObservableObject {
     /// Flush queued logs to the daily file
     func flushLog() {
         guard !logQueue.isEmpty else {
-            print("logQueueが空なので無視")
+            logger.debug("logQueueが空なので無視")
             return
         }
 
-        print("logQueueが空じゃないので以下を実行！")
+        logger.debug("logQueueが空じゃないので以下を実行！")
 
         let df = DateFormatter()
         df.dateFormat = "yyyyMMdd"
@@ -50,7 +53,7 @@ class InputText: ObservableObject {
         )[0].appendingPathComponent("next-toggl-track")
         let fileURL = directory.appendingPathComponent(fileName)
 
-        print("fileURL:\(fileURL)")
+        logger.debug("fileURL:\(fileURL)")
 
         let text = logQueue.joined(separator: "\n") + "\n"
         logQueue.removeAll()

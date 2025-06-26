@@ -8,6 +8,8 @@
 import SwiftUI
 import Cocoa
 
+
+
 struct ContentView: View {
     
     @StateObject var textInput = InputText()
@@ -24,38 +26,22 @@ struct ContentView: View {
                 TextEditor(text: $textInput.data)
                 TextEditor(text: $textIntermediate)
                 TextEditor(text: $textOutput)
-                Button{ print("button is clicked!") } label: {}
+                Button{ logger.debug("button is clicked!") } label: {}
             }
         }
         .onAppear {
-            print("onApper!")
+            logger.info("onApper!")
             textInput.appendLog(eventType: "app", content: "起動")
             
-            let options = [kAXTrustedCheckOptionPrompt.takeRetainedValue(): true] as CFDictionary
-            let accessEnabled = AXIsProcessTrustedWithOptions(options)
-            let isTrusted = AXIsProcessTrusted()
-            
-            // 設定 > セキュリティとプライバシー > 入力監視　は今回は必要ない。この権限はCGEventTapCreateなどで入力値の置き換えや
-            
-            print("AXIsProcessTrusted(): \(isTrusted)")
-            print("accessEnabled: \(accessEnabled)")
-            
-            if !accessEnabled {
-               let alert = NSAlert()
-               alert.messageText = "cat-urging-a-break-for-mac.app"
-               alert.informativeText = "システム環境設定でcat-urging-a-break-for-mac.app（このダイアログの後ろにあるダイアログを参照）のアクセシビリティを有効にして、このアプリを再度起動する必要があります"
-               alert.addButton(withTitle: "OK")
-               alert.runModal()
-               // 設定できたらアプリを再起動しないと意味ないためアプリ強制終了
-               //NSApplication.shared.terminate(self)
+            let accessibilityEnabled = checkAccessibilityPermission()
+            if !accessibilityEnabled {
+                requestAccessibilityPermission()
             }
             
-            // ContentViewが表示されるときにKeyboardMonitorを初期化する
-            let monitor = KeyboardMonitor(textInput: textInput)
-            monitor.startMonitoring()
-
-            // フォーカス変更を監視する
+            let KeyboardMonitor = KeyboardMonitor(textInput: textInput)
             focusMonitor = FocusMonitor(textInput: textInput)
+
+            KeyboardMonitor.startMonitoring()
             focusMonitor?.startMonitoring()
         }
     }
