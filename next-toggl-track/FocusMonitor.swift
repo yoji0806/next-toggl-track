@@ -98,7 +98,7 @@ class FocusMonitor {
                 if (count of documents) > 0 then
                     return URL of front document
                 else
-                    return  ("" & "nannmoarahen")
+                    return ("" & "nannmoarahen")
                 end if
             end tell
             """
