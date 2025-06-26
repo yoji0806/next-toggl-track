@@ -6,40 +6,81 @@ class FocusMonitor {
     private var previousAppName: String = ""
     private var previousURL: String = ""
     private var textInput: InputText
-
+    
     init(textInput: InputText) {
         self.textInput = textInput
     }
-
+    
     func startMonitoring() {
+        
+        //フォーカスが切り替わったタイミングでアプリ名を取得するobserverを追加
+        NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didActivateApplicationNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            if let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication {
+                let name = app.localizedName ?? "unknown"
+                logger.debug("Focus: \(name)")
+                
+                DispatchQueue.main.async {
+                    self?.textInput.data += "【focus: \(name)】"
+                    self?.textInput.appendLog(eventType: "focus", content: name)
+                }
+            }
+        }
+        
+        //
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             self.checkFrontApp()
         }
     }
-
+    
     func stopMonitoring() {
         timer?.invalidate()
     }
-
+    
     private func checkFrontApp() {
         guard let appName = NSWorkspace.shared.frontmostApplication?.localizedName else { return }
-
+        
         if appName != previousAppName {
             previousAppName = appName
             textInput.appendLog(eventType: "focus", content: appName)
         }
-
+        
         if appName == "Google Chrome" || appName == "Safari" {
+
+            //非同期(UI描画のmainスレッドは使わない)でurlを取得
+            DispatchQueue.global(qos: .background).async{
+                if let url = self.getActiveBrowserURL(appName: appName) {
+
+                     //非同期にUIを変更する(UI描画のmainスレッドを使用）
+                    DispatchQueue.main.async{
+                        if url != self.previousURL{
+                            self.previousURL = url
+                            self.textInput.appendLog(eventType: "url", content: url)
+                        }
+                    }
+                }
+            }
+            
             if let url = self.getActiveBrowserURL(appName: appName), url != previousURL {
                 previousURL = url
                 textInput.appendLog(eventType: "url", content: url)
             }
+
+
         }
     }
-
+    
     private func getActiveBrowserURL(appName: String) -> String? {
+        
+        print("iei: getActiveBrowserURL()")
+        
         let scriptSource: String
-
+        
+        print("iei: appName: \(appName)")
+        
         switch appName {
         case "Google Chrome":
             scriptSource = """
@@ -47,7 +88,7 @@ class FocusMonitor {
                 if (count of windows) > 0 and (count of tabs of front window) > 0 then
                     return URL of active tab of front window
                 else
-                    return ""
+                    return  ("" & "nannmoarahen")
                 end if
             end tell
             """
@@ -57,21 +98,30 @@ class FocusMonitor {
                 if (count of documents) > 0 then
                     return URL of front document
                 else
-                    return ""
+                    return  ("" & "nannmoarahen")
                 end if
             end tell
             """
         default:
             return nil
         }
-
+        
+        
         var error: NSDictionary?
         if let script = NSAppleScript(source: scriptSource) {
             let output = script.executeAndReturnError(&error)
+            
+            print("iei output: \(output)")
+            print("iei output.stringValue: \(output.stringValue)")
+            print("iei error: \(error)")
+            
             guard let result = output.stringValue else {
-            return nil
+                return nil
                 
+            }
+            return result
         }
+        
         return nil
     }
 }
