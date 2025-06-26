@@ -108,20 +108,21 @@ class FocusMonitor {
         
         
         var error: NSDictionary?
-        if let script = NSAppleScript(source: scriptSource) {
-            let output = script.executeAndReturnError(&error)
-            
-            print("iei output: \(output)")
-            print("iei output.stringValue: \(output.stringValue)")
-            print("iei error: \(error)")
-            
-            guard let result = output.stringValue else {
-                return nil
-                
-            }
-            return result
+        guard let script = NSAppleScript(source: scriptSource) else {
+            return nil
         }
-        
-        return nil
+
+        let output = script.executeAndReturnError(&error)
+
+        if let error = error {
+            logger.error("AppleScript error: \(error)")
+            return nil
+        }
+
+        guard let result = output.stringValue else {
+            return nil
+        }
+
+        return result
     }
 }
