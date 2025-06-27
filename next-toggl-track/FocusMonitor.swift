@@ -49,31 +49,17 @@ class FocusMonitor {
         }
         
         if appName == "Google Chrome" || appName == "Safari" {
-
-            //非同期(UI描画のmainスレッドは使わない)でurlを取得
-            //DispatchQueue.global(qos: .background).async{
-                if let url = self.getActiveBrowserURL(appName: appName) {
-
-                     //非同期にUIを変更する(UI描画のmainスレッドを使用）
-                    //DispatchQueue.main.async{
-                        if url != self.previousURL{
-                            self.previousURL = url
-                            self.textInput.appendLog(eventType: "url", content: url)
-                        }
-                    //}
+            getActiveBrowserURL(appName: appName) { url in
+                if let url = url, url != self.previousURL {
+                    self.previousURL = url
+                    self.textInput.appendLog(eventType: "url", content: url)
                 }
-            //}
-            
-            if let url = self.getActiveBrowserURL(appName: appName), url != previousURL {
-                previousURL = url
-                textInput.appendLog(eventType: "url", content: url)
             }
-
-
         }
+        
     }
     
-    private func getActiveBrowserURL(appName: String) -> String? {
+    private func getActiveBrowserURL(appName: String, completion: @escaping (String?) -> Void){
         
         print("iei: getActiveBrowserURL()")
         
@@ -103,31 +89,32 @@ class FocusMonitor {
             end tell
             """
         default:
-            return nil
+            scriptSource = "unknown"
         }
         
         
         var error: NSDictionary?
-        if let script = NSAppleScript(source: scriptSource) {
-            
-            DispatchQueue.global(qos: .background).async{
-                let output = script.executeAndReturnError(&error)
-                
-                print("iei output: \(output)")
-                print("iei output.stringValue: \(output.stringValue)")
-                print("iei error: \(error)")
-                
-                let result = output.stringValue
-                
-//                guard let result = output.stringValue else {
-//                    return nil
-//                }
-                
-               // return result
+        
+        guard let script = NSAppleScript(source: scriptSource) else {
+                completion(nil)
+                return
+        }
 
-            }
+
+        
+        DispatchQueue.global(qos: .background).async{
+            let output = script.executeAndReturnError(&error)
+            
+            print("iei output: \(output)")
+            print("iei output.stringValue: \(output.stringValue)")
+            print("iei error: \(error)")
+            
+            let result = output.stringValue
+            aaaaaa
+            completion(result)
+
+
         }
         
-        return nil
     }
 }
