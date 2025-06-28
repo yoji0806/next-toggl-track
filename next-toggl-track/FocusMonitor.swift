@@ -47,6 +47,7 @@ class FocusMonitor {
         if appName == "Google Chrome" || appName == "Safari" {
             getActiveBrowserURL(appName: appName) { url in
                 if let url = url, url != self.previousURL {
+                    logger.debug("URL detected: \(url)")
                     self.previousURL = url
                     self.textInput.appendLog(eventType: "url", content: url)
                 }
@@ -93,14 +94,11 @@ class FocusMonitor {
                 return
         }
 
-
         
         DispatchQueue.global(qos: .background).async{
             let output = script.executeAndReturnError(&error)
             let result = output.stringValue
             completion(result)
-
-
         }
         
     }
