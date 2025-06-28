@@ -110,7 +110,6 @@ class FocusMonitor {
             print("iei error: \(error)")
             
             let result = output.stringValue
-            aaaaaa
             completion(result)
 
 

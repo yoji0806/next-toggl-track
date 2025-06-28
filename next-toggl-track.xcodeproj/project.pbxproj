@@ -49,6 +49,8 @@
 		40156ECD2E05971E0082B78D /* next-toggl-trackUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "next-toggl-trackUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		40156ED12E05971E0082B78D /* next_toggl_trackUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = next_toggl_trackUITests.swift; sourceTree = "<group>"; };
 		40156ED32E05971E0082B78D /* next_toggl_trackUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = next_toggl_trackUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		403E18502E101C01008502D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		403E18512E101C0E008502D7 /* next-toggl-trackDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "next-toggl-trackDebug.entitlements"; sourceTree = "<group>"; };
 		4075B9272E0CDCEA00AF4494 /* Accessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accessibility.swift; sourceTree = "<group>"; };
 		4090A71C2E0CD5B400CBB957 /* FocusMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusMonitor.swift; sourceTree = "<group>"; };
 		4090A71D2E0CD5B400CBB957 /* InputText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputText.swift; sourceTree = "<group>"; };
@@ -103,6 +105,8 @@
 		40156EB42E05971C0082B78D /* next-toggl-track */ = {
 			isa = PBXGroup;
 			children = (
+				403E18512E101C0E008502D7 /* next-toggl-trackDebug.entitlements */,
+				403E18502E101C01008502D7 /* Info.plist */,
 				4075B9292E0CE2D100AF4494 /* Utility */,
 				4090A71C2E0CD5B400CBB957 /* FocusMonitor.swift */,
 				4090A71D2E0CD5B400CBB957 /* InputText.swift */,
@@ -444,7 +448,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "next-toggl-track/next_toggl_track.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "next-toggl-track/next-toggl-trackDebug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -453,6 +457,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "next-toggl-track/Info.plist";
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -480,6 +486,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "next-toggl-track/Info.plist";
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
