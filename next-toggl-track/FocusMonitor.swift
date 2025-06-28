@@ -30,7 +30,7 @@ class FocusMonitor {
             }
         }
         
-        //
+        // 1秒ごとのタイマーを開始
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             self.checkFrontApp()
         }
@@ -43,10 +43,6 @@ class FocusMonitor {
     private func checkFrontApp() {
         guard let appName = NSWorkspace.shared.frontmostApplication?.localizedName else { return }
         
-        if appName != previousAppName {
-            previousAppName = appName
-            textInput.appendLog(eventType: "focus", content: appName)
-        }
         
         if appName == "Google Chrome" || appName == "Safari" {
             getActiveBrowserURL(appName: appName) { url in
@@ -60,12 +56,9 @@ class FocusMonitor {
     }
     
     private func getActiveBrowserURL(appName: String, completion: @escaping (String?) -> Void){
-        
-        print("iei: getActiveBrowserURL()")
-        
+                
+                
         let scriptSource: String
-        
-        print("iei: appName: \(appName)")
         
         switch appName {
         case "Google Chrome":
@@ -104,11 +97,6 @@ class FocusMonitor {
         
         DispatchQueue.global(qos: .background).async{
             let output = script.executeAndReturnError(&error)
-            
-            print("iei output: \(output)")
-            print("iei output.stringValue: \(output.stringValue)")
-            print("iei error: \(error)")
-            
             let result = output.stringValue
             completion(result)
 
