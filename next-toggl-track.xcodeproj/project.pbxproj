@@ -14,6 +14,7 @@
 		40156EC82E05971E0082B78D /* next_toggl_trackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40156EC72E05971E0082B78D /* next_toggl_trackTests.swift */; };
 		40156ED22E05971E0082B78D /* next_toggl_trackUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40156ED12E05971E0082B78D /* next_toggl_trackUITests.swift */; };
 		40156ED42E05971E0082B78D /* next_toggl_trackUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40156ED32E05971E0082B78D /* next_toggl_trackUITestsLaunchTests.swift */; };
+		407561C52E11008C00DD4841 /* FileOpenMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407561C42E11008C00DD4841 /* FileOpenMonitor.swift */; };
 		4075B9282E0CDCEA00AF4494 /* Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4075B9272E0CDCEA00AF4494 /* Accessibility.swift */; };
 		4090A71F2E0CD5B400CBB957 /* FocusMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4090A71C2E0CD5B400CBB957 /* FocusMonitor.swift */; };
 		4090A7202E0CD5B400CBB957 /* InputText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4090A71D2E0CD5B400CBB957 /* InputText.swift */; };
@@ -51,6 +52,7 @@
 		40156ED32E05971E0082B78D /* next_toggl_trackUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = next_toggl_trackUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		403E18502E101C01008502D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		403E18512E101C0E008502D7 /* next-toggl-trackDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "next-toggl-trackDebug.entitlements"; sourceTree = "<group>"; };
+		407561C42E11008C00DD4841 /* FileOpenMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileOpenMonitor.swift; sourceTree = "<group>"; };
 		4075B9272E0CDCEA00AF4494 /* Accessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accessibility.swift; sourceTree = "<group>"; };
 		4090A71C2E0CD5B400CBB957 /* FocusMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusMonitor.swift; sourceTree = "<group>"; };
 		4090A71D2E0CD5B400CBB957 /* InputText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputText.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				4090A71E2E0CD5B400CBB957 /* KeyboardMonitor.swift */,
 				40156EB52E05971C0082B78D /* next_toggl_trackApp.swift */,
 				40156EB72E05971C0082B78D /* ContentView.swift */,
+				407561C42E11008C00DD4841 /* FileOpenMonitor.swift */,
 				40156EB92E05971D0082B78D /* Assets.xcassets */,
 				40156EBE2E05971D0082B78D /* next_toggl_track.entitlements */,
 				40156EBB2E05971D0082B78D /* Preview Content */,
@@ -288,6 +291,7 @@
 				4075B9282E0CDCEA00AF4494 /* Accessibility.swift in Sources */,
 				40156EB82E05971C0082B78D /* ContentView.swift in Sources */,
 				40156EB62E05971C0082B78D /* next_toggl_trackApp.swift in Sources */,
+				407561C52E11008C00DD4841 /* FileOpenMonitor.swift in Sources */,
 				4090A7202E0CD5B400CBB957 /* InputText.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

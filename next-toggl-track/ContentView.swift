@@ -13,6 +13,8 @@ import Cocoa
 struct ContentView: View {
     
     @StateObject var textInput = InputText()
+    @StateObject private var fileOpenMonitor = FileOpenMonitor()
+    
     @State var textIntermediate: String = "intermediate"
     @State var textOutput: String = "output"
     
@@ -24,7 +26,20 @@ struct ContentView: View {
             Sidebar()
             HStack {
                 TextEditor(text: $textInput.data)
-                TextEditor(text: $textIntermediate)
+                //TextEditor(text: $textIntermediate)
+                List(fileOpenMonitor.logs) { log in
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(log.name).bold()
+                        Text(log.path).font(.caption2).foregroundStyle(.secondary)
+                        Text(log.openedAt.formatted()).font(.caption2)
+                        if let snippet = log.content?.prefix(120) {
+                            Text(snippet + (log.content!.count > 120 ? "…" : ""))
+                                .font(.caption)
+                                .padding(.top, 4)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
                 TextEditor(text: $textOutput)
                 Button{ logger.debug("button is clicked!") } label: {}
             }
