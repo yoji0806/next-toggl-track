@@ -30,12 +30,18 @@ final class FileOpenMonitor: ObservableObject {
         print("ieiei: FileOpenMonitor の init()")
         // ▲ 初回だけ “これ以降で開かれたもの” に絞る
 //        query.predicate = NSPredicate(format: "%K > %@", NSMetadataItemLastUsedDateKey, lastCheckpoint as NSDate)
-//        query.searchScopes = [NSMetadataQueryUserHomeScope]   // 例：ホーム以下だけ
-        
         
         query.predicate = NSPredicate(format: "%K != ''", NSMetadataItemPathKey)
-        query.searchScopes = [NSMetadataQueryIndexedLocalComputerScope]  // Mac 全体に広げる
-
+                
+        query.searchScopes = ["/Users/yamamoto/Downloads/tmp_next_toggl"]
+        //その他の.searchScopes
+        //  - NSMetadataQueryIndexedLocalComputerScope: Mac全体。数十万件を読み込むので、UI描写の時にかなり重くなる。
+        //  - NSMetadataQueryUserHomeScope: ホーム以下
+        
+        //TODO: 保存などの操作を行うと、なぜか handleUpdate() が2回呼ばれる。
+        //TODO: ファイルを開いたときの現在時刻は反映されるが、そのまま再保存しても最初の開いたきの時刻でFileOpenLogオブジェクトに格納される？
+        //TODO: まずは開かれたファイルだけ取得したい。（→更新の有無も後で取りたい）
+        
         query.valueListAttributes = [NSMetadataItemDisplayNameKey,
                                      NSMetadataItemPathKey,
                                      NSMetadataItemLastUsedDateKey]
@@ -82,7 +88,7 @@ final class FileOpenMonitor: ObservableObject {
                       let date  = item.value(forAttribute: NSMetadataItemLastUsedDateKey) as? Date
                 else { return }
 
-                // 例：テキスト系だけ中身を読む（バイナリ巨大ファイルは無視）
+                // 一旦、テキスト系だけ中身を読む（バイナリ巨大ファイルは無視）
                 let content: String? = [
                     "txt","md","csv","json","swift"
                 ].contains(URL(fileURLWithPath: path).pathExtension.lowercased())
