@@ -40,14 +40,10 @@ final class FileOpenMonitor: ObservableObject {
         
         logger.debug("FileOpenMonitor 起動時刻: \(formattedTime)")
         
-        // ▲ 初回だけ “これ以降で開かれたもの” に絞る
-//        query.predicate = NSPredicate(format: "%K > %@", NSMetadataItemLastUsedDateKey, lastCheckpoint as NSDate)
-        
-        // パスが空じゃなかったらという条件でフィルター
-        //query.predicate = NSPredicate(format: "%K != ''", NSMetadataItemPathKey)
-        
         // アプリ起動時刻よりも遅い時刻に開かれたファイル、という条件でフィルター
         query.predicate = NSPredicate(format: "%K > %@", NSMetadataItemLastUsedDateKey, appStartTime as NSDate)
+        //その他の条件
+        //  - "%K != ''"　：パスが空じゃなかったら
                 
         query.searchScopes = ["/Users/yamamoto/Downloads/tmp_next_toggl"]
         //その他の.searchScopes
@@ -78,56 +74,78 @@ final class FileOpenMonitor: ObservableObject {
 
 
         query.start()
-        print("ieiei: Spotlight クエリを非同期で開始")
     }
     
     @objc private func handleInitial(_ note: Notification) {
-        print("ieiei 初期結果数: \(query.resultCount)")
+        logger.debug("初期結果数: \(self.query.resultCount)")
         query.results.forEach { item in
             if let m = item as? NSMetadataItem {
-                print(m)
+                logger.debug("      \(m)")
             }
         }
     }
 
 
     @objc private func handleUpdate(_ note: Notification) {
-        lastCheckpoint = Date()                    // 次回はこれ以降を監視
+
+        lastCheckpoint = Date()
         query.disableUpdates()
         defer { query.enableUpdates() }
         
-        query.results.forEach { item in
-            if let m = item as? NSMetadataItem,
-               let path = m.value(forAttribute: NSMetadataItemPathKey) as? String,
-               let date = m.value(forAttribute: NSMetadataItemLastUsedDateKey) as? Date {
-                logger.debug("path: \(path), lastUsedDate: \(date)")
-                self.textInput.appendLog(eventType: "file", content: path)
-            }
+        if let added = note.userInfo?[NSMetadataQueryUpdateAddedItemsKey] as? [NSMetadataItem] {
+            processItems(added, reason: "added")
         }
         
+//        if let changed = note.userInfo?[NSMetadataQueryUpdateChangedItemsKey] as? [NSMetadataItem] {
+//            processItems(changed, reason: "changed")
+//        }
+
         
+        
+//        query.results.forEach { item in
+//            if let m = item as? NSMetadataItem,
+//               let path = m.value(forAttribute: NSMetadataItemPathKey) as? String,
+//               let date = m.value(forAttribute: NSMetadataItemLastUsedDateKey) as? Date {
+//                logger.debug("path: \(path), lastUsedDate: \(date)")
+//                self.textInput.appendLog(eventType: "file", content: path)
+//            }
+//        }
+        
+    }
+    
+    private func processItems(_ items: [NSMetadataItem], reason: String) {
+        
+        print("items: \(items)")
+        
+        for item in items {
+            
+            guard let path = item.value(forAttribute: NSMetadataItemPathKey) as? String,
+                  let name = item.value(forAttribute: NSMetadataItemDisplayNameKey) as? String,
+                  let date = item.value(forAttribute: NSMetadataItemLastUsedDateKey) as? Date
+            else { continue }
+            
+            let formatter = DateFormatter()
+            formatter.locale = Locale.current
+            formatter.timeZone = TimeZone.current
+            formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            
+            let localDateString = formatter.string(from: date)
+            
+            logger.debug("(\(reason)) path: \(path), lastUsedDate: \(localDateString)")
+            
+            self.textInput.appendLog(eventType: "file", content: path)
+            
+            let content: String? = [
+                "txt","md","csv","json","swift"
+            ].contains(URL(fileURLWithPath: path).pathExtension.lowercased())
+            ? (try? String(contentsOfFile: path, encoding: .utf8)) : nil
 
-
-        query.results
-            .compactMap { $0 as? NSMetadataItem }
-            .forEach { item in
-                guard let path  = item.value(forAttribute: NSMetadataItemPathKey) as? String,
-                      let name  = item.value(forAttribute: NSMetadataItemDisplayNameKey) as? String,
-                      let date  = item.value(forAttribute: NSMetadataItemLastUsedDateKey) as? Date
-                else { return }
-
-                // 一旦、テキスト系だけ中身を読む（バイナリ巨大ファイルは無視）
-                let content: String? = [
-                    "txt","md","csv","json","swift"
-                ].contains(URL(fileURLWithPath: path).pathExtension.lowercased())
-                ? (try? String(contentsOfFile: path, encoding: .utf8)) : nil
-
-                DispatchQueue.main.async {
-                    self.logs.append(FileOpenLog(path: path,
-                                                 name: name,
-                                                 content: content,
-                                                 openedAt: date))
-                }
+            DispatchQueue.main.async {
+                self.logs.append(FileOpenLog(path: path,
+                                             name: name,
+                                             content: content,
+                                             openedAt: date))
+            }
         }
     }
 }
