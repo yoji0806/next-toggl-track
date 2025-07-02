@@ -14,10 +14,6 @@ struct ContentView: View {
     
     @StateObject var textInput = InputText()
     @StateObject var textURL = InputText()
-//    @StateObject private var fileOpenMonitor = FileOpenMonitor()
-    
-    @State var textIntermediate: String = "intermediate"
-    //@State var textOutput: String = "output"
     
     @State var focusMonitor: FocusMonitor?
     @State var fileOpenMonitor: FileOpenMonitor?
@@ -57,6 +53,7 @@ struct ContentView: View {
             
             let KeyboardMonitor = KeyboardMonitor(textInput: textInput)
             focusMonitor = FocusMonitor(textInput: textInput, textURL: textURL)
+            fileOpenMonitor = FileOpenMonitor(textInput: textInput)
 
             KeyboardMonitor.startMonitoring()
             focusMonitor?.startMonitoring()
