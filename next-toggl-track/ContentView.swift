@@ -13,12 +13,14 @@ import Cocoa
 struct ContentView: View {
     
     @StateObject var textInput = InputText()
-    @StateObject private var fileOpenMonitor = FileOpenMonitor()
+    @StateObject var textURL = InputText()
+//    @StateObject private var fileOpenMonitor = FileOpenMonitor()
     
     @State var textIntermediate: String = "intermediate"
-    @State var textOutput: String = "output"
+    //@State var textOutput: String = "output"
     
     @State var focusMonitor: FocusMonitor?
+    @State var fileOpenMonitor: FileOpenMonitor?
 
 
     var body: some View {
@@ -27,7 +29,7 @@ struct ContentView: View {
             HStack {
                 TextEditor(text: $textInput.data)
                 //TextEditor(text: $textIntermediate)
-                List(fileOpenMonitor.logs) { log in
+                List(fileOpenMonitor?.logs ?? []) { log in
                     VStack(alignment: .leading, spacing: 4) {
                         Text(log.name).bold()
                         Text(log.path).font(.caption2).foregroundStyle(.secondary)
@@ -40,8 +42,8 @@ struct ContentView: View {
                     }
                     .padding(.vertical, 4)
                 }
-                TextEditor(text: $textOutput)
-                Button{ logger.debug("button is clicked!") } label: {}
+                TextEditor(text: $textURL.data)
+                //Button{ logger.debug("button is clicked!") } label: {}
             }
         }
         .onAppear {
@@ -54,7 +56,7 @@ struct ContentView: View {
             }
             
             let KeyboardMonitor = KeyboardMonitor(textInput: textInput)
-            focusMonitor = FocusMonitor(textInput: textInput)
+            focusMonitor = FocusMonitor(textInput: textInput, textURL: textURL)
 
             KeyboardMonitor.startMonitoring()
             focusMonitor?.startMonitoring()

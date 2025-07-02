@@ -25,22 +25,40 @@ final class FileOpenMonitor: ObservableObject {
 
     private let query = NSMetadataQuery()
     private var lastCheckpoint = Date()
+    private let appStartTime: Date
+    private var textInput: InputText
 
-    init() {
-        print("ieiei: FileOpenMonitor の init()")
+    init(textInput: InputText) {
+        self.textInput = textInput
+        self.appStartTime = Date()  // アプリ起動時刻を記録
+        let formatter = DateFormatter()
+        formatter.locale = Locale.current           // ロケールをPCの設定に合わせる
+        formatter.timeZone = TimeZone.current       // タイムゾーンをPCの設定に合わせる
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss" // 好きなフォーマットで（例: 2025-06-29 14:30:00）
+
+        let formattedTime = formatter.string(from: self.appStartTime)
+        
+        logger.debug("FileOpenMonitor 起動時刻: \(formattedTime)")
+        
         // ▲ 初回だけ “これ以降で開かれたもの” に絞る
 //        query.predicate = NSPredicate(format: "%K > %@", NSMetadataItemLastUsedDateKey, lastCheckpoint as NSDate)
         
-        query.predicate = NSPredicate(format: "%K != ''", NSMetadataItemPathKey)
+        // パスが空じゃなかったらという条件でフィルター
+        //query.predicate = NSPredicate(format: "%K != ''", NSMetadataItemPathKey)
+        
+        // アプリ起動時刻よりも遅い時刻に開かれたファイル、という条件でフィルター
+        query.predicate = NSPredicate(format: "%K > %@", NSMetadataItemLastUsedDateKey, appStartTime as NSDate)
                 
         query.searchScopes = ["/Users/yamamoto/Downloads/tmp_next_toggl"]
         //その他の.searchScopes
         //  - NSMetadataQueryIndexedLocalComputerScope: Mac全体。数十万件を読み込むので、UI描写の時にかなり重くなる。
         //  - NSMetadataQueryUserHomeScope: ホーム以下
         
-        //TODO: 保存などの操作を行うと、なぜか handleUpdate() が2回呼ばれる。
+        //TODO: 保存などの操作を行うと、なぜか handleUpdate() が2回呼ばれる。→ どうやら、ファイルを開くという操作は"NSMetadataQueryDidUpdate"という通知が2回発生するらしい。
+        //  →フラグを見直す or 2回目の動作をなくす。
         //TODO: ファイルを開いたときの現在時刻は反映されるが、そのまま再保存しても最初の開いたきの時刻でFileOpenLogオブジェクトに格納される？
         //TODO: まずは開かれたファイルだけ取得したい。（→更新の有無も後で取りたい）
+            //現状は、対象のフォルダ内のファイルが毎回全部呼ばれる。
         
         query.valueListAttributes = [NSMetadataItemDisplayNameKey,
                                      NSMetadataItemPathKey,
@@ -78,7 +96,17 @@ final class FileOpenMonitor: ObservableObject {
         query.disableUpdates()
         defer { query.enableUpdates() }
         
-        print("ieiei: query.resultCount: \(query.resultCount)")
+        query.results.forEach { item in
+            if let m = item as? NSMetadataItem,
+               let path = m.value(forAttribute: NSMetadataItemPathKey) as? String,
+               let date = m.value(forAttribute: NSMetadataItemLastUsedDateKey) as? Date {
+                logger.debug("path: \(path), lastUsedDate: \(date)")
+                self.textInput.appendLog(eventType: "file", content: path)
+            }
+        }
+        
+        
+
 
         query.results
             .compactMap { $0 as? NSMetadataItem }

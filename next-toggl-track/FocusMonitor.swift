@@ -6,9 +6,11 @@ class FocusMonitor {
     private var previousAppName: String = ""
     private var previousURL: String = ""
     private var textInput: InputText
+    private var textURL: InputText
     
-    init(textInput: InputText) {
+    init(textInput: InputText, textURL: InputText) {
         self.textInput = textInput
+        self.textURL = textURL
     }
     
     func startMonitoring() {
@@ -24,6 +26,7 @@ class FocusMonitor {
                 logger.debug("Focus: \(name)")
                 
                 DispatchQueue.main.async {
+                    self?.textInput.data += "\n\n===============================\n"
                     self?.textInput.data += "【focus: \(name)】"
                     self?.textInput.appendLog(eventType: "focus", content: name)
                 }
@@ -47,9 +50,18 @@ class FocusMonitor {
         if appName == "Google Chrome" || appName == "Safari" {
             getActiveBrowserURL(appName: appName) { url in
                 if let url = url, url != self.previousURL {
+                    
+                    let df = DateFormatter()
+                    df.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                    df.locale = Locale.current
+                    df.timeZone = TimeZone.current
+                    let timestamp = df.string(from: Date())
+                    
                     logger.debug("URL detected: \(url)")
                     self.previousURL = url
                     self.textInput.appendLog(eventType: "url", content: url)
+                    self.textInput.data += "\n-------------------\n\(url)\n\n"
+                    self.textURL.data += "\(timestamp): \n\(url)\n\n"
                 }
             }
         }

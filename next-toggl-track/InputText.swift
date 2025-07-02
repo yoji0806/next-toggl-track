@@ -5,7 +5,7 @@ import SwiftUI
 
 
 class InputText: ObservableObject {
-    @Published var data: String = "input"
+    @Published var data: String = ""
 
     /// Queue for storing log lines before writing to disk
     var logQueue: [String] = []
