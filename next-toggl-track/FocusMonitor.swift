@@ -26,7 +26,7 @@ class FocusMonitor {
                 logger.debug("Focus: \(name)")
                 
                 DispatchQueue.main.async {
-                    self?.textInput.data += "\n\n===============================\n"
+                    self?.textInput.data += "\n\n============================\n"
                     self?.textInput.data += "【focus: \(name)】"
                     self?.textInput.appendLog(eventType: "focus", content: name)
                 }
