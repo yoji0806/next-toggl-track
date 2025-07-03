@@ -1,6 +1,14 @@
 import Foundation
 import SwiftUI
 
+
+//TODO: かな入力で以下をキャプチャーできていないので、する。
+//    - んsdasだあ　みたいな
+//    -　数字（全角）
+//    - ？＋などの記号
+//TODO: カタカナモードの追加
+
+
 class InputBuffer: ObservableObject {
     @Published var buffer = ""
     @Published var log = ""
@@ -12,30 +20,62 @@ class InputBuffer: ObservableObject {
     }
 
     let romajiToKana: [String: String] = [
+        // 母音
         "a": "あ", "i": "い", "u": "う", "e": "え", "o": "お",
+
+        // 清音
         "ka": "か", "ki": "き", "ku": "く", "ke": "け", "ko": "こ",
-        "sa": "さ", "shi": "し", "su": "す", "se": "せ", "so": "そ",
-        "ta": "た", "chi": "ち", "tsu": "つ", "te": "て", "to": "と",
+        "sa": "さ", "si": "し", "su": "す", "se": "せ", "so": "そ",
+                    "shi": "し",
+        "ta": "た", "ti": "ち", "tu": "つ", "te": "て", "to": "と",
+                    "chi": "ち", "tsu": "つ",
         "na": "な", "ni": "に", "nu": "ぬ", "ne": "ね", "no": "の",
         "ha": "は", "hi": "ひ", "fu": "ふ", "he": "へ", "ho": "ほ",
         "ma": "ま", "mi": "み", "mu": "む", "me": "め", "mo": "も",
         "ya": "や", "yu": "ゆ", "yo": "よ",
         "ra": "ら", "ri": "り", "ru": "る", "re": "れ", "ro": "ろ",
-        "wa": "わ", "wo": "を", "n": "ん",
+        "wa": "わ", "wo": "を",
+        "nn": "ん",
+
+        // 濁音
+        "ga": "が", "gi": "ぎ", "gu": "ぐ", "ge": "げ", "go": "ご",
+        "za": "ざ", "zi": "じ", "zu": "ず", "ze": "ぜ", "zo": "ぞ",
+                    "ji": "じ",
+        "da": "だ", "di": "ぢ", "du": "づ", "de": "で", "do": "ど",
+        "ba": "ば", "bi": "び", "bu": "ぶ", "be": "べ", "bo": "ぼ",
+
+        // 半濁音
+        "pa": "ぱ", "pi": "ぴ", "pu": "ぷ", "pe": "ぺ", "po": "ぽ",
+
+        // 拗音・合拗音
         "kya": "きゃ", "kyu": "きゅ", "kyo": "きょ",
+        "gya": "ぎゃ", "gyu": "ぎゅ", "gyo": "ぎょ",
         "sha": "しゃ", "shu": "しゅ", "sho": "しょ",
+        "ja": "じゃ", "ju": "じゅ", "jo": "じょ",
         "cha": "ちゃ", "chu": "ちゅ", "cho": "ちょ",
         "nya": "にゃ", "nyu": "にゅ", "nyo": "にょ",
         "hya": "ひゃ", "hyu": "ひゅ", "hyo": "ひょ",
+        "bya": "びゃ", "byu": "びゅ", "byo": "びょ",
+        "pya": "ぴゃ", "pyu": "ぴゅ", "pyo": "ぴょ",
         "mya": "みゃ", "myu": "みゅ", "myo": "みょ",
         "rya": "りゃ", "ryu": "りゅ", "ryo": "りょ",
+
+        // 外来語用音
+        "fa": "ふぁ", "fi": "ふぃ", "fe": "ふぇ", "fo": "ふぉ",
+        "va": "ゔぁ", "vi": "ゔぃ", "vu": "ゔ", "ve": "ゔぇ", "vo": "ゔぉ",
+        "wi": "うぃ", "we": "うぇ",
+        "she": "しぇ", "je": "じぇ",
+        "che": "ちぇ",
+
+        // 小文字・促音
         "ltu": "っ", "xtu": "っ",
         "la": "ぁ", "xa": "ぁ",
         "li": "ぃ", "xi": "ぃ",
         "lu": "ぅ", "xu": "ぅ",
         "le": "ぇ", "xe": "ぇ",
-        "lo": "ぉ", "xo": "ぉ"
+        "lo": "ぉ", "xo": "ぉ",
     ]
+
 
     func appendEnglish(_ char: String) {
         buffer += char
@@ -57,10 +97,10 @@ class InputBuffer: ObservableObject {
             }
         }
 
-        if buffer.hasSuffix("nn") {
-            buffer.removeLast()
-            log += "ん"
-        }
+//        if buffer.hasSuffix("nn") {
+//            buffer.removeLast()
+//            log += "ん"
+//        }
     }
 
     func deleteLast() {
