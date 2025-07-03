@@ -13,7 +13,11 @@ import Cocoa
 struct ContentView: View {
     
     @StateObject var textInput = InputText()
+    @StateObject var textParsedKeyBaord = InputText()
     @StateObject var textURL = InputText()
+    
+    @StateObject var inputBuffer = InputBuffer()
+    let keyTapManager = KeyTapManager()
     
     @State var focusMonitor: FocusMonitor?
     @State var fileOpenMonitor: FileOpenMonitor?
@@ -24,7 +28,9 @@ struct ContentView: View {
             Sidebar()
             HStack {
                 TextEditor(text: $textInput.data)
-                //TextEditor(text: $textIntermediate)
+                    .disabled(true)
+                TextEditor(text: $inputBuffer.log)
+                    .disabled(true)
                 List(fileOpenMonitor?.logs ?? []) { log in
                     VStack(alignment: .leading, spacing: 4) {
                         Text(log.name).bold()
@@ -39,6 +45,7 @@ struct ContentView: View {
                     .padding(.vertical, 4)
                 }
                 TextEditor(text: $textURL.data)
+                    .disabled(true)
                 //Button{ logger.debug("button is clicked!") } label: {}
             }
         }
@@ -57,6 +64,9 @@ struct ContentView: View {
 
             KeyboardMonitor.startMonitoring()
             focusMonitor?.startMonitoring()
+            
+            keyTapManager.startTap(inputBuffer: inputBuffer)
+
         }
     }
 }

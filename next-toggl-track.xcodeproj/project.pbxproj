@@ -19,6 +19,7 @@
 		4090A71F2E0CD5B400CBB957 /* FocusMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4090A71C2E0CD5B400CBB957 /* FocusMonitor.swift */; };
 		4090A7202E0CD5B400CBB957 /* InputText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4090A71D2E0CD5B400CBB957 /* InputText.swift */; };
 		4090A7212E0CD5B400CBB957 /* KeyboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4090A71E2E0CD5B400CBB957 /* KeyboardMonitor.swift */; };
+		40E6D3B52E16A449001BC0A8 /* KeyInputParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E6D3B42E16A449001BC0A8 /* KeyInputParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		4090A71C2E0CD5B400CBB957 /* FocusMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusMonitor.swift; sourceTree = "<group>"; };
 		4090A71D2E0CD5B400CBB957 /* InputText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputText.swift; sourceTree = "<group>"; };
 		4090A71E2E0CD5B400CBB957 /* KeyboardMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardMonitor.swift; sourceTree = "<group>"; };
+		40E6D3B42E16A449001BC0A8 /* KeyInputParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyInputParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				4090A71C2E0CD5B400CBB957 /* FocusMonitor.swift */,
 				4090A71D2E0CD5B400CBB957 /* InputText.swift */,
 				4090A71E2E0CD5B400CBB957 /* KeyboardMonitor.swift */,
+				40E6D3B42E16A449001BC0A8 /* KeyInputParser.swift */,
 				40156EB52E05971C0082B78D /* next_toggl_trackApp.swift */,
 				40156EB72E05971C0082B78D /* ContentView.swift */,
 				407561C42E11008C00DD4841 /* FileOpenMonitor.swift */,
@@ -291,6 +294,7 @@
 				4075B9282E0CDCEA00AF4494 /* Accessibility.swift in Sources */,
 				40156EB82E05971C0082B78D /* ContentView.swift in Sources */,
 				40156EB62E05971C0082B78D /* next_toggl_trackApp.swift in Sources */,
+				40E6D3B52E16A449001BC0A8 /* KeyInputParser.swift in Sources */,
 				407561C52E11008C00DD4841 /* FileOpenMonitor.swift in Sources */,
 				4090A7202E0CD5B400CBB957 /* InputText.swift in Sources */,
 			);
