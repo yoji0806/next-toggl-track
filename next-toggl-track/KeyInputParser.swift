@@ -9,10 +9,26 @@ import SwiftUI
 //TODO: カタカナモードの追加
 
 
+
 class InputBuffer: ObservableObject {
     @Published var buffer = ""
     @Published var log = ""
     @Published var inputMode: InputMode = .english
+    
+    var logQueue: [String] = []
+    private var timer: Timer?
+    
+    init() {
+        // Start timer to flush logs to disk every 10 seconds
+        timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
+            self?.flushLog()
+        }
+    }
+    
+    deinit {
+        timer?.invalidate()
+    }
+
 
     enum InputMode {
         case english
@@ -119,6 +135,21 @@ class InputBuffer: ObservableObject {
     func commitEnter() {
         log += "\n"
         buffer = ""
+    }
+    
+    
+    
+    //log（テキストファイルに出力するもの）
+    
+    /// Append a new log entry
+    func appendLog(eventType: String, content: String) {
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        df.locale = Locale.current
+        df.timeZone = TimeZone.current
+        let timestamp = df.string(from: Date())
+        let line = "\(timestamp), \(eventType), \(content)"
+        logQueue.append(line)
     }
 }
 
