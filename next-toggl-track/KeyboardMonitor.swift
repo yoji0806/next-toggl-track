@@ -6,19 +6,71 @@ class KeyboardMonitor: NSObject {
 
     var textInput: InputText
 
+    private var tap: CFMachPort?
+    private var runLoopSrc: CFRunLoopSource?
+
     init(textInput: InputText) {
         self.textInput = textInput
     }
 
     func startMonitoring() {
-        NSEvent.addGlobalMonitorForEvents(matching: [.keyDown, .leftMouseDown, .rightMouseDown], handler: handleEvent)
+        // Start mouse event monitor
+        NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown], handler: handleMouseEvent)
+
+        // Monitor keyDown and textInput via CGEventTap to capture committed strings
+        let mask = (1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.textInput.rawValue)
+
+        tap = CGEvent.tapCreate(
+            tap: .cgSessionEventTap,
+            place: .headInsertEventTap,
+            options: .defaultTap,
+            eventsOfInterest: CGEventMask(mask),
+            callback: { _, type, cgEvent, refcon in
+                guard let refcon = refcon else { return Unmanaged.passUnretained(cgEvent) }
+                let monitor = Unmanaged<KeyboardMonitor>.fromOpaque(refcon).takeUnretainedValue()
+                monitor.handleCGEvent(type: type, cgEvent: cgEvent)
+                return Unmanaged.passUnretained(cgEvent)
+            },
+            userInfo: UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque())
+        )
+
+        guard let tap = tap else { return }
+        runLoopSrc = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSrc, .commonModes)
+        CGEvent.tapEnable(tap: tap, enable: true)
     }
 
-    private func handleEvent(_ event: NSEvent) {
+    private func handleMouseEvent(_ event: NSEvent) {
         let action = parseAction(from: event)
         DispatchQueue.main.async {
             self.textInput.data += action
             self.textInput.appendLog(eventType: String(describing: event.type), content: action)
+        }
+    }
+
+    private func handleCGEvent(type: CGEventType, cgEvent: CGEvent) {
+        switch type {
+        case .textInput:
+            var length: UniCharCount = 0
+            var chars: [UniChar] = Array(repeating: 0, count: 256)
+            CGEventKeyboardGetUnicodeString(cgEvent, 256, &length, &chars)
+            if length > 0 {
+                let str = String(utf16CodeUnits: chars, count: Int(length))
+                DispatchQueue.main.async {
+                    self.textInput.data += str
+                    self.textInput.appendLog(eventType: "textInput", content: str)
+                }
+            }
+        case .keyDown:
+            if let event = NSEvent(cgEvent: cgEvent) {
+                let action = parseAction(from: event)
+                DispatchQueue.main.async {
+                    self.textInput.data += action
+                    self.textInput.appendLog(eventType: "keyDown", content: action)
+                }
+            }
+        default:
+            break
         }
     }
 
