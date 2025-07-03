@@ -34,7 +34,7 @@ class KeyboardMonitor: NSObject {
             case 256:   //character or Enter or Space
                 switch event.keyCode {
                 case 36: action = "↵"   //Enter
-                case 48: action = "⇥"
+                case 48: action = "⇥"   //Tab
                 case 49: action = "␣"   //Space
                 case 51: action = "⌫"   //Delete
                 case 53: action = "⎋"    //Escape(esc)
