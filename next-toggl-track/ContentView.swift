@@ -15,8 +15,8 @@ struct ContentView: View {
     @StateObject var textInput = InputText()
     @StateObject var textParsedKeyBaord = InputText()
     @StateObject var textURL = InputText()
-    
-    @StateObject var inputBuffer = InputBuffer()
+    @StateObject var textInput_parsed = KeyInputParser()
+
     let keyTapManager = KeyTapManager()
     
     @State var focusMonitor: FocusMonitor?
@@ -29,7 +29,7 @@ struct ContentView: View {
             HStack {
                 TextEditor(text: $textInput.data)
                     .disabled(true)
-                TextEditor(text: $inputBuffer.log)
+                TextEditor(text: $textInput_parsed.log)
                     .disabled(true)
                 List(fileOpenMonitor?.logs ?? []) { log in
                     VStack(alignment: .leading, spacing: 4) {
@@ -52,6 +52,7 @@ struct ContentView: View {
         .onAppear {
             logger.info("onApper!")
             textInput.appendLog(eventType: "app", content: "起動")
+            textInput_parsed.appendLog_parsed(eventType: "app", content: "起動")
             
             let accessibilityEnabled = checkAccessibilityPermission()
             if !accessibilityEnabled {
@@ -59,13 +60,13 @@ struct ContentView: View {
             }
             
             let KeyboardMonitor = KeyboardMonitor(textInput: textInput)
-            focusMonitor = FocusMonitor(textInput: textInput, textURL: textURL)
-            fileOpenMonitor = FileOpenMonitor(textInput: textInput)
+            focusMonitor = FocusMonitor(textInput: textInput, textURL: textURL, textInput_parsed: textInput_parsed)
+            fileOpenMonitor = FileOpenMonitor(textInput: textInput, textInput_parsed: textInput_parsed)
 
             KeyboardMonitor.startMonitoring()
             focusMonitor?.startMonitoring()
             
-            keyTapManager.startTap(inputBuffer: inputBuffer)
+            keyTapManager.startTap(inputBuffer: textInput_parsed)
 
         }
     }

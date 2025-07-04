@@ -27,9 +27,12 @@ final class FileOpenMonitor: ObservableObject {
     private var lastCheckpoint = Date()
     private let appStartTime: Date
     private var textInput: InputText
+    private var textInput_parsed: KeyInputParser
 
-    init(textInput: InputText) {
+    init(textInput: InputText, textInput_parsed: KeyInputParser) {
         self.textInput = textInput
+        self.textInput_parsed = textInput_parsed
+        
         self.appStartTime = Date()  // アプリ起動時刻を記録
         let formatter = DateFormatter()
         formatter.locale = Locale.current           // ロケールをPCの設定に合わせる
@@ -134,6 +137,11 @@ final class FileOpenMonitor: ObservableObject {
             logger.debug("(\(reason)) path: \(path), lastUsedDate: \(localDateString)")
             
             self.textInput.appendLog(eventType: "file", content: path)
+            self.textInput.appendLog(eventType: "file", content: localDateString)
+            
+            self.textInput_parsed.appendLog_parsed(eventType: "", content: "")   //1行開けるために　TODO: 本来はそのための関数やオプションをつけてもいいかも。
+            self.textInput_parsed.appendLog_parsed(eventType: "file", content: path)
+            self.textInput_parsed.appendLog_parsed(eventType: "file", content: localDateString)
             
             let content: String? = [
                 "txt","md","csv","json","swift"
@@ -145,6 +153,7 @@ final class FileOpenMonitor: ObservableObject {
                                              name: name,
                                              content: content,
                                              openedAt: date))
+                self.textInput_parsed.appendLog_parsed(eventType: "file's content", content: content ?? "")
             }
         }
     }

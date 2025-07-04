@@ -5,23 +5,33 @@ import SwiftUI
 //TODO: かな入力で以下をキャプチャーできていないので、する。
 //    - んsdasだあ　みたいな
 //    -　数字（全角）
-//    - ？＋などの記号
+//    - ？＋〜〜などの記号
+//    - ,、。. などの句読点
 //TODO: カタカナモードの追加
 
 
 
-class InputBuffer: ObservableObject {
+class KeyInputParser: ObservableObject {
     @Published var buffer = ""
     @Published var log = ""
     @Published var inputMode: InputMode = .english
     
+    /// Queue for storing log lines before writing to disk
+    ///  InputText.swift にも同じものはある。それぞれ別のファイルとして保存される。
     var logQueue: [String] = []
     private var timer: Timer?
     
     init() {
         // Start timer to flush logs to disk every 10 seconds
         timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
-            self?.flushLog()
+            let text = (self?.logQueue.joined(separator: "\n") ?? "") + "\n"
+            self?.appendLog_parsed(eventType: "keyboard(scheduled batch)", content: text)
+        
+//            DispatchQueue.main.async {
+//                self?.appendLog_parsed(eventType: "keyboard(scheduled batch)", content: text)
+//            }
+//            
+            self?.flushLog_parsed()
         }
     }
     
@@ -85,12 +95,66 @@ class InputBuffer: ObservableObject {
 
         // 小文字・促音
         "ltu": "っ", "xtu": "っ",
+        "tta": "った", "tti": "っち", "ttu": "っつ", "tte": "って", "tto": "っと",
         "la": "ぁ", "xa": "ぁ",
         "li": "ぃ", "xi": "ぃ",
         "lu": "ぅ", "xu": "ぅ",
         "le": "ぇ", "xe": "ぇ",
         "lo": "ぉ", "xo": "ぉ",
     ]
+    
+    
+    /// Flush queued logs to the daily file
+    func flushLog_parsed() {
+        guard !logQueue.isEmpty else {
+            logger.debug("logQueueが空なので無視")
+            return
+        }
+
+        logger.debug("logQueueが空じゃないので以下を実行！")
+
+        let df = DateFormatter()
+        df.dateFormat = "yyyyMMdd"
+        let fileName = df.string(from: Date()) + "_parsed" + ".txt"
+
+        let fileManager = FileManager.default
+        let directory = fileManager.urls(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask
+        )[0].appendingPathComponent("next-toggl-track")
+        let fileURL = directory.appendingPathComponent(fileName)
+
+        logger.debug("fileURL:\(fileURL)")
+
+        let text = logQueue.joined(separator: "\n") + "\n"
+        logQueue.removeAll()
+
+        if let data = text.data(using: .utf8) {
+            if fileManager.fileExists(atPath: fileURL.path) {
+                if let handle = try? FileHandle(forWritingTo: fileURL) {
+                    handle.seekToEndOfFile()
+                    handle.write(data)
+                    try? handle.close()
+                }
+            } else {
+                try? fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
+                try? data.write(to: fileURL)
+            }
+        }
+    }
+    
+    
+    /// Append a new log entry
+    func appendLog_parsed(eventType: String, content: String) {
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        df.locale = Locale.current
+        df.timeZone = TimeZone.current
+        let timestamp = df.string(from: Date())
+        let line = "\(timestamp), \(eventType), \(content)"
+        logQueue.append(line)
+    }
+    
 
 
     func appendEnglish(_ char: String) {
@@ -139,18 +203,6 @@ class InputBuffer: ObservableObject {
     
     
     
-    //log（テキストファイルに出力するもの）
-    
-    /// Append a new log entry
-    func appendLog(eventType: String, content: String) {
-        let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        df.locale = Locale.current
-        df.timeZone = TimeZone.current
-        let timestamp = df.string(from: Date())
-        let line = "\(timestamp), \(eventType), \(content)"
-        logQueue.append(line)
-    }
 }
 
 
@@ -163,7 +215,7 @@ import Carbon
 class KeyTapManager {
     private var eventTap: CFMachPort?
 
-    func detectInitialInputMode() -> InputBuffer.InputMode {
+    func detectInitialInputMode() -> KeyInputParser.InputMode {
         if let source = TISCopyCurrentKeyboardInputSource()?.takeUnretainedValue(),
            let idPtr = TISGetInputSourceProperty(source, kTISPropertyInputSourceID) {
             let inputSourceID = Unmanaged<CFString>.fromOpaque(idPtr).takeUnretainedValue() as String
@@ -175,7 +227,7 @@ class KeyTapManager {
         return .english
     }
 
-    func startTap(inputBuffer: InputBuffer) {
+    func startTap(inputBuffer: KeyInputParser) {
         inputBuffer.inputMode = detectInitialInputMode()
 
         let mask = (1 << CGEventType.keyDown.rawValue)
@@ -186,7 +238,7 @@ class KeyTapManager {
             eventsOfInterest: CGEventMask(mask),
             callback: { _, _, cgEvent, refcon in
                 guard let refcon = refcon else { return Unmanaged.passUnretained(cgEvent) }
-                let inputBuffer = Unmanaged<InputBuffer>.fromOpaque(refcon).takeUnretainedValue()
+                let inputBuffer = Unmanaged<KeyInputParser>.fromOpaque(refcon).takeUnretainedValue()
 
                 let keyCode = cgEvent.getIntegerValueField(.keyboardEventKeycode)
                 var cBuf: [UniChar] = Array(repeating: 0, count: 4)
@@ -238,5 +290,19 @@ class KeyTapManager {
             eventTap = nil
         }
     }
+    
+    
 }
 
+
+
+
+
+//
+//private func handleEvent(_ event: NSEvent) {
+//    let action = parseAction(from: event)
+//    DispatchQueue.main.async {
+//        self.textInput.data += action
+//        self.textInput.appendLog(eventType: String(describing: event.type), content: action)
+//    }
+//}

@@ -7,10 +7,12 @@ class FocusMonitor {
     private var previousURL: String = ""
     private var textInput: InputText
     private var textURL: InputText
+    private var textInput_parsed: KeyInputParser
     
-    init(textInput: InputText, textURL: InputText) {
+    init(textInput: InputText, textURL: InputText, textInput_parsed: KeyInputParser) {
         self.textInput = textInput
         self.textURL = textURL
+        self.textInput_parsed = textInput_parsed
     }
     
     func startMonitoring() {
@@ -29,6 +31,7 @@ class FocusMonitor {
                     self?.textInput.data += "\n\n============================\n"
                     self?.textInput.data += "【focus: \(name)】"
                     self?.textInput.appendLog(eventType: "focus", content: name)
+                    self?.textInput_parsed.appendLog_parsed(eventType: "focus", content: name)
                 }
             }
         }
@@ -60,6 +63,8 @@ class FocusMonitor {
                     logger.debug("URL detected: \(url)")
                     self.previousURL = url
                     self.textInput.appendLog(eventType: "url", content: url)
+                    self.textInput_parsed.appendLog_parsed(eventType: "", content: "") //1行開けるために　TODO: 本来はそのための関数やオプションをつけてもいいかも。
+                    self.textInput_parsed.appendLog_parsed(eventType: "url", content: url)
                     self.textInput.data += "\n-------------------\n\(url)\n\n"
                     self.textURL.data += "\(timestamp): \n\(url)\n\n"
                 }
