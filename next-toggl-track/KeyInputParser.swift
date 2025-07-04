@@ -25,6 +25,7 @@ class KeyInputParser: ObservableObject {
         // Start timer to flush logs to disk every 10 seconds
         timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
             let text = (self?.logQueue.joined(separator: "\n") ?? "") + "\n"
+            //TODO: うまく反映されない。以下のDispatchQueue.main.asyncでも同じ（この場合は、ファイルの内容が毎回必ず読み込まれているかも？）
             self?.appendLog_parsed(eventType: "keyboard(scheduled batch)", content: text)
         
 //            DispatchQueue.main.async {

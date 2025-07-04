@@ -62,10 +62,10 @@ class FocusMonitor {
                     
                     logger.debug("URL detected: \(url)")
                     self.previousURL = url
-                    self.textInput.appendLog(eventType: "url", content: url)
+                    //self.textInput.appendLog(eventType: "url", content: url)  //textURLと重複するので一旦コメントアウト
                     self.textInput_parsed.appendLog_parsed(eventType: "", content: "") //1行開けるために　TODO: 本来はそのための関数やオプションをつけてもいいかも。
                     self.textInput_parsed.appendLog_parsed(eventType: "url", content: url)
-                    self.textInput.data += "\n-------------------\n\(url)\n\n"
+                    //self.textInput.data += "\n-------------------\n\(url)\n\n"
                     self.textURL.data += "\(timestamp): \n\(url)\n\n"
                 }
             }
