@@ -13,10 +13,14 @@ import Cocoa
 struct ContentView: View {
     
     @StateObject var textInput = InputText()
-    @State var textIntermediate: String = "intermediate"
-    @State var textOutput: String = "output"
+    @StateObject var textParsedKeyBaord = InputText()
+    @StateObject var textURL = InputText()
+    @StateObject var textInput_parsed = KeyInputParser()
+
+    let keyTapManager = KeyTapManager()
     
     @State var focusMonitor: FocusMonitor?
+    @State var fileOpenMonitor: FileOpenMonitor?
 
 
     var body: some View {
@@ -24,14 +28,31 @@ struct ContentView: View {
             Sidebar()
             HStack {
                 TextEditor(text: $textInput.data)
-                TextEditor(text: $textIntermediate)
-                TextEditor(text: $textOutput)
-                Button{ logger.debug("button is clicked!") } label: {}
+                    .disabled(true)
+                TextEditor(text: $textInput_parsed.log)
+                    .disabled(true)
+                List(fileOpenMonitor?.logs ?? []) { log in
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(log.name).bold()
+                        Text(log.path).font(.caption2).foregroundStyle(.secondary)
+                        Text(log.openedAt.formatted()).font(.caption2)
+                        if let snippet = log.content?.prefix(120) {
+                            Text(snippet + (log.content!.count > 120 ? "…" : ""))
+                                .font(.caption)
+                                .padding(.top, 4)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
+                TextEditor(text: $textURL.data)
+                    .disabled(true)
+                //Button{ logger.debug("button is clicked!") } label: {}
             }
         }
         .onAppear {
             logger.info("onApper!")
             textInput.appendLog(eventType: "app", content: "起動")
+            textInput_parsed.appendLog_parsed(eventType: "app", content: "起動")
             
             let accessibilityEnabled = checkAccessibilityPermission()
             if !accessibilityEnabled {
@@ -39,10 +60,14 @@ struct ContentView: View {
             }
             
             let KeyboardMonitor = KeyboardMonitor(textInput: textInput)
-            focusMonitor = FocusMonitor(textInput: textInput)
+            focusMonitor = FocusMonitor(textInput: textInput, textURL: textURL, textInput_parsed: textInput_parsed)
+            fileOpenMonitor = FileOpenMonitor(textInput: textInput, textInput_parsed: textInput_parsed)
 
             KeyboardMonitor.startMonitoring()
             focusMonitor?.startMonitoring()
+            
+            keyTapManager.startTap(inputBuffer: textInput_parsed)
+
         }
     }
 }
