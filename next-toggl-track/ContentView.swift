@@ -46,10 +46,8 @@ struct ContentView: View {
             VSplitView{
 
                 HStack {
-                    TextEditor(text: $textInput.data)
-                        .disabled(true)
-                    TextEditor(text: $textInput_parsed.log)
-                        .disabled(true)
+                    LogScrollColumn(text: textInput.data)
+                    LogScrollColumn(text: textInput_parsed.log)
                     List(fileOpenMonitor?.logs ?? []) { log in
                         VStack(alignment: .leading, spacing: 4) {
                             Text(log.name).bold()
@@ -63,8 +61,8 @@ struct ContentView: View {
                         }
                         .padding(.vertical, 4)
                     }
-                    TextEditor(text: $textURL.data)
-                        .disabled(true)
+                    LogScrollColumn(text: textURL.data)
+                    
                     //Button{ logger.debug("button is clicked!") } label: {}
                 }
                 // ─── 2段目: フロー図 ───
@@ -106,6 +104,28 @@ struct Sidebar: View {
         }
     }
 }
+
+
+/// 1 列ぶんの読み取り専用ログビュー
+struct LogScrollColumn: View {
+    let text: String
+
+    var body: some View {
+        ScrollView {                     // ← 縦スクロール
+            Text(text)
+                .font(.system(.body, design: .monospaced))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .textSelection(.enabled) // コピー可
+                .padding()
+        }
+        .background(Color(NSColor.textBackgroundColor))
+        .overlay(                        // 枠線をうっすら
+            RoundedRectangle(cornerRadius: 4)
+                .stroke(Color.secondary.opacity(0.2))
+        )
+    }
+}
+
 
 
 
