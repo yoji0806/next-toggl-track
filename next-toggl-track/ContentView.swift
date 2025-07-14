@@ -29,6 +29,9 @@ struct ContentView: View {
         ]),
         FlowNode(iconName: "hammer")
     ])
+    
+    // ① 高さを動的に変えたい場合
+    @State private var flowHeight: CGFloat = 240   // 0 で非表示
 
 
     var body: some View {
@@ -59,9 +62,15 @@ struct ContentView: View {
                     //Button{ logger.debug("button is clicked!") } label: {}
                 }
                 // ─── 2段目: フロー図 ───
-                FlowGraphView(root: flowRoot)
-                    .frame(maxWidth: .infinity, maxHeight: 300)   // 高さはお好みで
-                    .padding(.horizontal)
+                FlowGraphView(root: flowRoot, direction: .horizontal)
+                    .frame(maxWidth: .infinity)   // 横はいっぱい
+                    .frame(height: flowHeight)    // 高さ可変
+                
+                // 高さを手動で変える UI 例 (不要なら削除)
+                Slider(value: $flowHeight, in: 0...400) {
+                    Text("Flow Height")
+                }
+                .padding(.horizontal)
             }
             .navigationTitle("next-toggl-track")   // 必要ならタイトルを設定
         }
@@ -101,134 +110,189 @@ struct Sidebar: View {
 
 
 
+// MARK: - Layout Direction
+/// フローを縦 (トップダウン)・横 (レフトトゥライト) のどちらで描くか
+enum GraphDirection { case vertical, horizontal }
+
 // MARK: - Data Model
 /// ノード 1 つ分の情報。`iconName` には SF Symbols 名やアセット名を入れ、階層を `children` で表現します。
-final class FlowNode: Identifiable, ObservableObject {
-    let id = UUID()
-    let iconName: String
-    @Published var children: [FlowNode]
+/// `Identifiable` だけで十分ですが、将来 Set などで扱う可能性を考慮して `Hashable` も実装しています。
+final class FlowNode: Identifiable, ObservableObject, Hashable {
+  static func == (lhs: FlowNode, rhs: FlowNode) -> Bool { lhs.id == rhs.id }
+  func hash(into hasher: inout Hasher) { hasher.combine(id) }
 
-    init(iconName: String, children: [FlowNode] = []) {
-        self.iconName = iconName
-        self.children  = children
-    }
+  let id = UUID()
+  let iconName: String
+  @Published var children: [FlowNode]
+
+  init(iconName: String, children: [FlowNode] = []) {
+      self.iconName = iconName
+      self.children  = children
+  }
 }
 
 // MARK: - ビュー本体
-/// フロー全体を行ごと (レベルごと) に並べ、各行を左右中央揃えで表示します。
+/// フロー全体を行 (縦) または列 (横) ごとに並べ、中央揃えで表示します。
 /// 点線のエッジは Canvas で描画し、ダッシュパターンでモダンな見た目に。
 struct FlowGraphView: View {
-    @ObservedObject var root: FlowNode
+  @ObservedObject var root: FlowNode
 
-    // 行内・行間の間隔を調整したい場合はここを変更
-    var hSpacing: CGFloat = 40
-    var vSpacing: CGFloat = 32
+  /// デフォルトは横向き
+  var direction: GraphDirection = .horizontal
 
-    var body: some View {
-        GeometryReader { geo in
-            // レベル配列を 1 回だけ計算
-            let rows = levels(of: root)
+  /// ノード間隔
+  var hSpacing: CGFloat = 40
+  var vSpacing: CGFloat = 32
 
-            ZStack {
-                // ── 点線エッジ ──
-                edgeLayer(rows: rows, in: geo.size)
+  var body: some View {
+      GeometryReader { geo in
+          let levels = levels(of: root)            // BFS 一発計算
+          ZStack {
+              edgeLayer(levels: levels, in: geo.size) // ── 点線エッジ ──
 
-                // ── ノード (アイコン) ──
-                VStack(alignment: .center, spacing: vSpacing) {
-                    // \`rows\` は [[FlowNode]]。行番号を ID にして中央揃えを維持
-                    ForEach(Array(rows.enumerated()), id: \.offset) { _, level in
-                        HStack(spacing: hSpacing) {
-                            Spacer(minLength: 0)          // ✔︎ 行を中央揃えに
-                            ForEach(level) { node in      // FlowNode は Identifiable
-                                NodeView(node: node)
-                            }
-                            Spacer(minLength: 0)
-                        }
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .top)
-            }
-        }
-        .frame(maxWidth: .infinity, minHeight: 200)
-        .padding(.vertical)
-    }
+              // ── ノード ──
+              if direction == .vertical {
+                  VStack(alignment: .center, spacing: vSpacing) {
+                      ForEach(Array(levels.enumerated()), id: \ .offset) { _, row in
+                          HStack(spacing: hSpacing) {
+                              Spacer(minLength: 0)
+                              ForEach(row) { node in
+                                  NodeView(node: node)
+                              }
+                              Spacer(minLength: 0)
+                          }
+                      }
+                  }
+              } else { // horizontal
+                  HStack(alignment: .center, spacing: hSpacing) {
+                      Spacer(minLength: 0)
+                      ForEach(Array(levels.enumerated()), id: \ .offset) { _, column in
+                          VStack(spacing: vSpacing) {
+                              ForEach(column) { node in
+                                  NodeView(node: node)
+                              }
+                          }
+                      }
+                      Spacer(minLength: 0)
+                  }
+              }
+          }
+          .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+      }
+      .frame(maxWidth: .infinity)
+  }
 
-    // MARK: - Edge Drawing
-    /// 子ノードへの線をすべて描画
-    private func edgeLayer(rows: [[FlowNode]], in size: CGSize) -> some View {
-        Canvas { context, _ in
-            let nodeSize: CGFloat = 48 + 24    // アイコン 48 + padding 12*2
+  // MARK: - Edge Drawing
+  private func edgeLayer(levels: [[FlowNode]], in size: CGSize) -> some View {
+      Canvas { context, _ in
+          let nodeSize: CGFloat = 48 + 24    // NodeView: アイコン 48 + padding 12*2
 
-            for (rowIndex, row) in rows.enumerated() where rowIndex + 1 < rows.count {
-                let nextRow = rows[rowIndex + 1]
+          switch direction {
+          // ──────────── 縦 ────────────
+          case .vertical:
+              for (rowIndex, row) in levels.enumerated() where rowIndex + 1 < levels.count {
+                  let nextRow = levels[rowIndex + 1]
 
-                // 行幅を計算して X オフセットを求める
-                let rowWidth      = CGFloat(row.count) * nodeSize + CGFloat(max(0, row.count - 1)) * hSpacing
-                let nextRowWidth  = CGFloat(nextRow.count) * nodeSize + CGFloat(max(0, nextRow.count - 1)) * hSpacing
-                let rowStartX     = (size.width - rowWidth)  / 2 + nodeSize / 2
-                let nextRowStartX = (size.width - nextRowWidth) / 2 + nodeSize / 2
-                let fromY = CGFloat(rowIndex) * (nodeSize + vSpacing) + nodeSize / 2 + 12   // 12 = padding
-                let toY   = fromY + nodeSize + vSpacing - 24                               // -24 で下端調整
+                  let rowWidth      = CGFloat(row.count) * nodeSize + CGFloat(max(0, row.count - 1)) * hSpacing
+                  let nextRowWidth  = CGFloat(nextRow.count) * nodeSize + CGFloat(max(0, nextRow.count - 1)) * hSpacing
+                  let rowStartX     = (size.width - rowWidth)      / 2 + nodeSize / 2
+                  let nextRowStartX = (size.width - nextRowWidth)  / 2 + nodeSize / 2
+                  let fromY = CGFloat(rowIndex) * (nodeSize + vSpacing) + nodeSize / 2 + 12
+                  let toY   = fromY + nodeSize + vSpacing - 24
 
-                for (colIndex, node) in row.enumerated() {
-                    for (nextIndex, child) in nextRow.enumerated() where node.children.contains(where: { $0.id == child.id }) {
-                        let fromX = rowStartX + CGFloat(colIndex) * (nodeSize + hSpacing)
-                        let toX   = nextRowStartX + CGFloat(nextIndex) * (nodeSize + hSpacing)
+                  for (colIndex, node) in row.enumerated() {
+                      for (nextIdx, child) in nextRow.enumerated() where node.children.contains(where: { $0.id == child.id }) {
+                          let fromX = rowStartX     + CGFloat(colIndex) * (nodeSize + hSpacing)
+                          let toX   = nextRowStartX + CGFloat(nextIdx)  * (nodeSize + hSpacing)
 
-                        var path = Path()
-                        path.move(to: CGPoint(x: fromX, y: fromY))
-                        path.addLine(to: CGPoint(x: toX, y: toY))
-                        context.stroke(path, with: .color(.secondary), style: StrokeStyle(lineWidth: 1, dash: [5, 5]))
-                    }
-                }
-            }
-        }
-        .allowsHitTesting(false)
-    }
+                          var path = Path()
+                          path.move(to: CGPoint(x: fromX, y: fromY))
+                          path.addLine(to: CGPoint(x: toX,   y: toY))
+                          context.stroke(path, with: .color(.secondary), style: StrokeStyle(lineWidth: 1, dash: [5, 5]))
+                      }
+                  }
+              }
 
-    // MARK: - Helpers
-    /// BFS でレベル別にノードを収集
-    private func levels(of root: FlowNode) -> [[FlowNode]] {
-        var result: [[FlowNode]] = []
-        var queue: [FlowNode] = [root]
-        while !queue.isEmpty {
-            result.append(queue)
-            queue = queue.flatMap { $0.children }
-        }
-        return result
-    }
+          // ──────────── 横 ────────────
+          case .horizontal:
+              for (colIndex, column) in levels.enumerated() where colIndex + 1 < levels.count {
+                  let nextColumn = levels[colIndex + 1]
+
+                  let columnHeight     = CGFloat(column.count) * nodeSize + CGFloat(max(0, column.count - 1)) * vSpacing
+                  let nextColumnHeight = CGFloat(nextColumn.count) * nodeSize + CGFloat(max(0, nextColumn.count - 1)) * vSpacing
+                  let columnStartY     = (size.height - columnHeight)     / 2 + nodeSize / 2
+                  let nextColumnStartY = (size.height - nextColumnHeight) / 2 + nodeSize / 2
+
+                  let totalWidth = CGFloat(levels.count) * nodeSize + CGFloat(max(0, levels.count - 1)) * hSpacing
+                  let colStartX  = (size.width - totalWidth) / 2 + nodeSize / 2 + CGFloat(colIndex) * (nodeSize + hSpacing)
+                  let nextStartX = colStartX + nodeSize + hSpacing
+
+                  for (rowIndex, node) in column.enumerated() {
+                      for (nextRowIdx, child) in nextColumn.enumerated() where node.children.contains(where: { $0.id == child.id }) {
+                          let fromY = columnStartY     + CGFloat(rowIndex)   * (nodeSize + vSpacing)
+                          let toY   = nextColumnStartY + CGFloat(nextRowIdx) * (nodeSize + vSpacing)
+
+                          var path = Path()
+                          path.move(to: CGPoint(x: colStartX,  y: fromY))
+                          path.addLine(to: CGPoint(x: nextStartX, y: toY))
+                          context.stroke(path, with: .color(.secondary), style: StrokeStyle(lineWidth: 1, dash: [5, 5]))
+                      }
+                  }
+              }
+          }
+      }
+      .allowsHitTesting(false)
+  }
+
+  // MARK: - Helpers
+  /// BFS でレベル別にノードを収集
+  private func levels(of root: FlowNode) -> [[FlowNode]] {
+      var result: [[FlowNode]] = []
+      var queue: [FlowNode] = [root]
+      while !queue.isEmpty {
+          result.append(queue)
+          queue = queue.flatMap { $0.children }
+      }
+      return result
+  }
 }
 
 // MARK: - 個々のノードビュー
 struct NodeView: View {
-    @ObservedObject var node: FlowNode
+  @ObservedObject var node: FlowNode
 
-    var body: some View {
-        Image(systemName: node.iconName)
-            .resizable()
-            .scaledToFit()
-            .frame(width: 48, height: 48)
-            .padding(12)
-            .background(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(Color(.windowBackgroundColor))
-                    .shadow(radius: 4)
-            )
-    }
+  var body: some View {
+      Image(systemName: node.iconName)
+          .resizable()
+          .scaledToFit()
+          .frame(width: 48, height: 48)
+          .padding(12)
+          .background(
+              RoundedRectangle(cornerRadius: 20, style: .continuous)
+                  .fill(Color(.windowBackgroundColor))
+                  .shadow(radius: 4)
+          )
+  }
 }
 
 // MARK: - プレビュー
 struct FlowGraphView_Previews: PreviewProvider {
-    static var sample: FlowNode = {
-        FlowNode(iconName: "macwindow", children: [
-            FlowNode(iconName: "safari", children: [ FlowNode(iconName: "envelope") ]),
-            FlowNode(iconName: "hammer")
-        ])
-    }()
+  static var sample: FlowNode = {
+      FlowNode(iconName: "macwindow", children: [
+          FlowNode(iconName: "safari", children: [ FlowNode(iconName: "envelope") ]),
+          FlowNode(iconName: "hammer")
+      ])
+  }()
 
-    static var previews: some View {
-        FlowGraphView(root: sample)
-            .frame(height: 300)
-            .padding()
-    }
+  static var previews: some View {
+      VStack(spacing: 24) {
+          FlowGraphView(root: sample, direction: .horizontal)
+              .frame(height: 160)
+              .padding()
+          FlowGraphView(root: sample, direction: .vertical)
+              .frame(height: 160)
+              .padding()
+      }
+      .frame(width: 600)
+  }
 }
