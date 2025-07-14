@@ -46,22 +46,10 @@ struct ContentView: View {
             VSplitView{
 
                 HStack {
-                    LogScrollColumn(text: textInput.data)
-                    LogScrollColumn(text: textInput_parsed.log)
-                    List(fileOpenMonitor?.logs ?? []) { log in
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(log.name).bold()
-                            Text(log.path).font(.caption2).foregroundStyle(.secondary)
-                            Text(log.openedAt.formatted()).font(.caption2)
-                            if let snippet = log.content?.prefix(120) {
-                                Text(snippet + (log.content!.count > 120 ? "…" : ""))
-                                    .font(.caption)
-                                    .padding(.top, 4)
-                            }
-                        }
-                        .padding(.vertical, 4)
-                    }
-                    LogScrollColumn(text: textURL.data)
+                    AutoScrollLogColumn(text: textInput.data)
+                    AutoScrollLogColumn(text: textInput_parsed.log)
+                    AutoScrollFileList(logs: fileOpenMonitor?.logs ?? [])
+                    AutoScrollLogColumn(text: textURL.data)
                     
                     //Button{ logger.debug("button is clicked!") } label: {}
                 }
@@ -104,6 +92,87 @@ struct Sidebar: View {
         }
     }
 }
+
+
+
+
+/// 読み取り専用ログを“常に末尾が見える”状態で表示
+struct AutoScrollLogColumn: View {
+    let text: String
+    private let bottomID = "BOTTOM-ANCHOR"
+
+    var body: some View {
+        ScrollViewReader { proxy in
+            ScrollView {
+                Text(text)
+                    .font(.system(.body, design: .monospaced))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .textSelection(.enabled)
+                    .padding(.vertical, 4)
+                    .padding(.horizontal)
+
+                Color.clear.frame(height: 1)   // ⬇︎ スクロール先アンカー
+                    .id(bottomID)
+            }
+            .background(Color(NSColor.textBackgroundColor))
+            .overlay(
+                RoundedRectangle(cornerRadius: 4)
+                    .stroke(Color.secondary.opacity(0.2))
+            )
+            // 文字列が変わった直後に 1 フレーム遅延して末尾へ
+            .onChange(of: text) { _ in
+                DispatchQueue.main.async {
+                    withAnimation(.linear(duration: 0.15)) {
+                        proxy.scrollTo(bottomID, anchor: .bottom)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+struct AutoScrollFileList: View {
+    let logs: [FileOpenLog]
+
+    var body: some View {
+        ScrollViewReader { proxy in
+            List(logs) { log in
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(log.name).bold()
+                    Text(log.path)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    Text(log.openedAt.formatted())
+                        .font(.caption2)
+                    if let snippet = log.content?.prefix(120) {
+                        Text(snippet + (log.content!.count > 120 ? "…" : ""))
+                            .font(.caption)
+                            .padding(.top, 4)
+                    }
+                }
+                .padding(.vertical, 4)
+                .id(log.id)             // ← 重要：各行に ID
+            }
+            // 末尾追加時スクロール
+            .onChange(of: logs.count) { _ in
+                guard let last = logs.last else { return }
+                DispatchQueue.main.async {
+                    withAnimation(.linear(duration: 0.15)) {
+                        proxy.scrollTo(last.id, anchor: .bottom)
+                    }
+                }
+            }
+        }
+        .frame(minWidth: 240)
+    }
+}
+
+
 
 
 /// 1 列ぶんの読み取り専用ログビュー
