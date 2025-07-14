@@ -101,9 +101,8 @@ struct Sidebar: View {
 
 
 
-// MARK: - Data Model
-/// ノード 1 つ分の情報。アプリ名や URL を \`iconName\` に入れると SF Symbols が表示されます。
-/// 実際のアイコン画像を使いたい場合は \`Image(uiImage:)\` などに差し替えてください。
+// MARK: - Data Model
+/// ノード 1 つ分の情報。`iconName` には SF Symbols 名やアセット名を入れ、階層を `children` で表現します。
 final class FlowNode: Identifiable, ObservableObject {
     let id = UUID()
     let iconName: String
@@ -115,118 +114,121 @@ final class FlowNode: Identifiable, ObservableObject {
     }
 }
 
-// MARK: - ノードの見た目
+// MARK: - ビュー本体
+/// フロー全体を行ごと (レベルごと) に並べ、各行を左右中央揃えで表示します。
+/// 点線のエッジは Canvas で描画し、ダッシュパターンでモダンな見た目に。
+struct FlowGraphView: View {
+    @ObservedObject var root: FlowNode
+
+    // 行内・行間の間隔を調整したい場合はここを変更
+    var hSpacing: CGFloat = 40
+    var vSpacing: CGFloat = 32
+
+    var body: some View {
+        GeometryReader { geo in
+            // レベル配列を 1 回だけ計算
+            let rows = levels(of: root)
+
+            ZStack {
+                // ── 点線エッジ ──
+                edgeLayer(rows: rows, in: geo.size)
+
+                // ── ノード (アイコン) ──
+                VStack(alignment: .center, spacing: vSpacing) {
+                    // \`rows\` は [[FlowNode]]。行番号を ID にして中央揃えを維持
+                    ForEach(Array(rows.enumerated()), id: \.offset) { _, level in
+                        HStack(spacing: hSpacing) {
+                            Spacer(minLength: 0)          // ✔︎ 行を中央揃えに
+                            ForEach(level) { node in      // FlowNode は Identifiable
+                                NodeView(node: node)
+                            }
+                            Spacer(minLength: 0)
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .top)
+            }
+        }
+        .frame(maxWidth: .infinity, minHeight: 200)
+        .padding(.vertical)
+    }
+
+    // MARK: - Edge Drawing
+    /// 子ノードへの線をすべて描画
+    private func edgeLayer(rows: [[FlowNode]], in size: CGSize) -> some View {
+        Canvas { context, _ in
+            let nodeSize: CGFloat = 48 + 24    // アイコン 48 + padding 12*2
+
+            for (rowIndex, row) in rows.enumerated() where rowIndex + 1 < rows.count {
+                let nextRow = rows[rowIndex + 1]
+
+                // 行幅を計算して X オフセットを求める
+                let rowWidth      = CGFloat(row.count) * nodeSize + CGFloat(max(0, row.count - 1)) * hSpacing
+                let nextRowWidth  = CGFloat(nextRow.count) * nodeSize + CGFloat(max(0, nextRow.count - 1)) * hSpacing
+                let rowStartX     = (size.width - rowWidth)  / 2 + nodeSize / 2
+                let nextRowStartX = (size.width - nextRowWidth) / 2 + nodeSize / 2
+                let fromY = CGFloat(rowIndex) * (nodeSize + vSpacing) + nodeSize / 2 + 12   // 12 = padding
+                let toY   = fromY + nodeSize + vSpacing - 24                               // -24 で下端調整
+
+                for (colIndex, node) in row.enumerated() {
+                    for (nextIndex, child) in nextRow.enumerated() where node.children.contains(where: { $0.id == child.id }) {
+                        let fromX = rowStartX + CGFloat(colIndex) * (nodeSize + hSpacing)
+                        let toX   = nextRowStartX + CGFloat(nextIndex) * (nodeSize + hSpacing)
+
+                        var path = Path()
+                        path.move(to: CGPoint(x: fromX, y: fromY))
+                        path.addLine(to: CGPoint(x: toX, y: toY))
+                        context.stroke(path, with: .color(.secondary), style: StrokeStyle(lineWidth: 1, dash: [5, 5]))
+                    }
+                }
+            }
+        }
+        .allowsHitTesting(false)
+    }
+
+    // MARK: - Helpers
+    /// BFS でレベル別にノードを収集
+    private func levels(of root: FlowNode) -> [[FlowNode]] {
+        var result: [[FlowNode]] = []
+        var queue: [FlowNode] = [root]
+        while !queue.isEmpty {
+            result.append(queue)
+            queue = queue.flatMap { $0.children }
+        }
+        return result
+    }
+}
+
+// MARK: - 個々のノードビュー
 struct NodeView: View {
-    let node: FlowNode
+    @ObservedObject var node: FlowNode
 
     var body: some View {
         Image(systemName: node.iconName)
-            .font(.system(size: 24, weight: .semibold))
-            .foregroundStyle(.primary)
-            .padding(16)
+            .resizable()
+            .scaledToFit()
+            .frame(width: 48, height: 48)
+            .padding(12)
             .background(
-                Circle()
-                    .fill(.background)
-                    .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(Color(.windowBackgroundColor))
+                    .shadow(radius: 4)
             )
     }
 }
 
-// MARK: - レイアウト計算
-/// それぞれのノードをキャンバス上の座標にマッピングします。
-fileprivate func layoutPositions(root: FlowNode,
-                                 hSpacing: CGFloat,
-                                 vSpacing: CGFloat) -> [UUID: CGPoint] {
-    var positions: [UUID: CGPoint] = [:]
-    func helper(node: FlowNode, depth: Int, centerX: CGFloat) -> CGFloat {
-        // 再帰的に横幅を計算しつつ位置を決定
-        let childWidths = node.children.map { helper(node: $0, depth: depth + 1, centerX: centerX) }
-        let subtreeWidth = max( CGFloat(childWidths.reduce(0, +)), 1) * hSpacing
-        let x = centerX
-        let y = CGFloat(depth) * vSpacing + 50
-        positions[node.id] = CGPoint(x: x, y: y)
-
-        // 子供の中心を分配
-        var startX = x - subtreeWidth / 2
-        for child in node.children {
-            positions[child.id]?.x = startX + hSpacing / 2
-            startX += hSpacing
-        }
-        return max(subtreeWidth, hSpacing)
-    }
-    _ = helper(node: root, depth: 0, centerX: 0)
-    return positions
-}
-
-// MARK: - グラフ全体
-struct FlowGraphView: View {
-    @ObservedObject var root: FlowNode
-    var hSpacing: CGFloat = 140
-    var vSpacing: CGFloat = 120
-
-    var body: some View {
-        GeometryReader { geo in
-            let positions = layoutPositions(root: root,
-                                             hSpacing: hSpacing,
-                                             vSpacing: vSpacing)
-            ZStack {
-                // 点線を Canvas で描画
-                Canvas { ctx, size in
-                    drawLines(from: root, positions: positions, ctx: &ctx)
-                }
-                // ノードを配置
-                ForEach(nodes(from: root)) { node in
-                    if let pos = positions[node.id] {
-                        NodeView(node: node)
-                            .position(pos)
-                    }
-                }
-            }
-            // 少し余白を確保
-            .frame(width: geo.size.width, height: geo.size.height)
-        }
-    }
-
-    /// すべてのノードを DFS で取得
-    private func nodes(from node: FlowNode) -> [FlowNode] {
-        return [node] + node.children.flatMap { nodes(from: $0) }
-    }
-
-    /// 再帰的に点線を描く
-    private func drawLines(from node: FlowNode,
-                           positions: [UUID: CGPoint],
-                           ctx: inout GraphicsContext) {
-        guard let from = positions[node.id] else { return }
-        for child in node.children {
-            if let to = positions[child.id] {
-                var path = Path()
-                path.move(to: from)
-                path.addLine(to: to)
-                ctx.stroke(path,
-                           with: .color(.secondary),
-                           style: StrokeStyle(lineWidth: 2, dash: [6, 4]))
-                drawLines(from: child, positions: positions, ctx: &ctx)
-            }
-        }
-    }
-}
-
 // MARK: - プレビュー
-#Preview {
-    // サンプルデータ生成
-    let mail = FlowNode(iconName: "envelope")
-    let browser = FlowNode(iconName: "safari")
-    let docs = FlowNode(iconName: "doc.text")
-    let terminal = FlowNode(iconName: "terminal")
+struct FlowGraphView_Previews: PreviewProvider {
+    static var sample: FlowNode = {
+        FlowNode(iconName: "macwindow", children: [
+            FlowNode(iconName: "safari", children: [ FlowNode(iconName: "envelope") ]),
+            FlowNode(iconName: "hammer")
+        ])
+    }()
 
-    let design = FlowNode(iconName: "pencil.and.ruler")
-    design.children = [mail, browser]
-
-    let root = FlowNode(iconName: "app.fill", children: [design, docs, terminal])
-
-    return ScrollView([.horizontal, .vertical]) {
-        FlowGraphView(root: root)
-            .frame(minWidth: 800, minHeight: 600)
-            .padding(80)
+    static var previews: some View {
+        FlowGraphView(root: sample)
+            .frame(height: 300)
+            .padding()
     }
 }
