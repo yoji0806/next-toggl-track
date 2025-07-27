@@ -185,10 +185,21 @@ class KeyInputParser: ObservableObject {
     }
 
     func deleteLast() {
-        if !buffer.isEmpty {
-            buffer.removeLast()
-        } else if !log.isEmpty {
-            log.removeLast()
+        switch inputMode {
+        case .english:
+            // 英数入力では buffer と log が常に同じ長さなので、
+            // どちらも 1 文字ずつ削除する
+            if !buffer.isEmpty  { buffer.removeLast() }
+            if !log.isEmpty     { log.removeLast() }
+
+        case .japanese:
+            // ローマ字変換中（buffer が残っている）なら buffer だけ削除。
+            // 変換確定後（buffer が空）なら log から 1 文字削除。
+            if !buffer.isEmpty {
+                buffer.removeLast()
+            } else if !log.isEmpty {
+                log.removeLast()
+            }
         }
     }
 
