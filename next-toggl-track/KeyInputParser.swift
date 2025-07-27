@@ -1,45 +1,59 @@
 import Foundation
 import SwiftUI
+import Cocoa
+import Carbon
 
-
-//TODO: かな入力で以下をキャプチャーできていないので、する。
-//    - んsdasだあ　みたいな
-//    -　数字（全角）
-//    - ？＋〜〜などの記号
+// TODO: かな入力で以下をキャプチャーできていないので、する。
+//    - んsdasだあ みたいな
+//    - 数字（全角）
+//    - ？＋〜ーなどの記号
 //    - ,、。. などの句読点
-//TODO: カタカナモードの追加
-
-
+// TODO: カタカナモードの追加 → macでは入力モードにカタカナ入力モードつけている人少ないか。
+// TODO: 漢字への変換
 
 class KeyInputParser: ObservableObject {
-    @Published var buffer = ""
-    @Published var log = ""
+    @Published var buffer = ""  //（日本語入力用）変換確定前の“作業用”領域。
+    @Published var log = ""     //（日本語入力用）確定後の“完成品”を保持し、UI 表示とファイル保存の両方を担う。
     @Published var inputMode: InputMode = .english
+
+    /// 前回 flush した時点でのログ文字数
+    private var lastLoggedIndex: String.Index = "".startIndex
     
     /// Queue for storing log lines before writing to disk
     ///  InputText.swift にも同じものはある。それぞれ別のファイルとして保存される。
     var logQueue: [String] = []
     private var timer: Timer?
-    
+
     init() {
+        
         // Start timer to flush logs to disk every 10 seconds
         timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
-            let text = (self?.logQueue.joined(separator: "\n") ?? "") + "\n"
-            //TODO: うまく反映されない。以下のDispatchQueue.main.asyncでも同じ（この場合は、ファイルの内容が毎回必ず読み込まれているかも？）
-            self?.appendLog_parsed(eventType: "keyboard(scheduled batch)", content: text)
-        
-//            DispatchQueue.main.async {
-//                self?.appendLog_parsed(eventType: "keyboard(scheduled batch)", content: text)
+            guard let self else { return }
+            
+            let diff = log[lastLoggedIndex...]
+            if !diff.isEmpty {
+                appendLog_parsed(eventType: "keyboard(scheduled batch)", content: String(diff))
+                lastLoggedIndex = log.endIndex
+            }
+
+//            // 最後に flush してから追加された差分だけを切り出す
+//            if self.log.count > self.lastLoggedIndex {
+//                let startIdx = self.log.index(self.log.startIndex, offsetBy: self.lastLoggedIndex)
+//                let text = String(self.log[startIdx...])
+//                self.lastLoggedIndex = self.log.count
+//
+//                if !text.isEmpty {
+//                    self.appendLog_parsed(eventType: "keyboard(scheduled batch)", content: text)
+//                }
 //            }
-//            
-            self?.flushLog_parsed()
+
+            self.flushLog_parsed()
         }
     }
-    
+
     deinit {
         timer?.invalidate()
     }
-
 
     enum InputMode {
         case english
@@ -53,9 +67,9 @@ class KeyInputParser: ObservableObject {
         // 清音
         "ka": "か", "ki": "き", "ku": "く", "ke": "け", "ko": "こ",
         "sa": "さ", "si": "し", "su": "す", "se": "せ", "so": "そ",
-                    "shi": "し",
+        "shi": "し",
         "ta": "た", "ti": "ち", "tu": "つ", "te": "て", "to": "と",
-                    "chi": "ち", "tsu": "つ",
+        "chi": "ち", "tsu": "つ",
         "na": "な", "ni": "に", "nu": "ぬ", "ne": "ね", "no": "の",
         "ha": "は", "hi": "ひ", "fu": "ふ", "he": "へ", "ho": "ほ",
         "ma": "ま", "mi": "み", "mu": "む", "me": "め", "mo": "も",
@@ -67,7 +81,7 @@ class KeyInputParser: ObservableObject {
         // 濁音
         "ga": "が", "gi": "ぎ", "gu": "ぐ", "ge": "げ", "go": "ご",
         "za": "ざ", "zi": "じ", "zu": "ず", "ze": "ぜ", "zo": "ぞ",
-                    "ji": "じ",
+        "ji": "じ",
         "da": "だ", "di": "ぢ", "du": "づ", "de": "で", "do": "ど",
         "ba": "ば", "bi": "び", "bu": "ぶ", "be": "べ", "bo": "ぼ",
 
@@ -143,8 +157,7 @@ class KeyInputParser: ObservableObject {
             }
         }
     }
-    
-    
+
     /// Append a new log entry
     func appendLog_parsed(eventType: String, content: String) {
         let df = DateFormatter()
@@ -155,8 +168,6 @@ class KeyInputParser: ObservableObject {
         let line = "\(timestamp), \(eventType), \(content)"
         logQueue.append(line)
     }
-    
-
 
     func appendEnglish(_ char: String) {
         buffer += char
@@ -177,28 +188,26 @@ class KeyInputParser: ObservableObject {
                 }
             }
         }
-
-//        if buffer.hasSuffix("nn") {
-//            buffer.removeLast()
-//            log += "ん"
-//        }
     }
 
     func deleteLast() {
         switch inputMode {
         case .english:
-            // 英数入力では buffer と log が常に同じ長さなので、
-            // どちらも 1 文字ずつ削除する
-            if !buffer.isEmpty  { buffer.removeLast() }
-            if !log.isEmpty     { log.removeLast() }
-
+            // buffer と log が常に同じ長さ
+            if !buffer.isEmpty { buffer.removeLast() }
+            if !log.isEmpty {
+                log.removeLast()
+                lastLoggedIndex = log.endIndex   // 巻き戻し
+            }
+            
         case .japanese:
-            // ローマ字変換中（buffer が残っている）なら buffer だけ削除。
-            // 変換確定後（buffer が空）なら log から 1 文字削除。
             if !buffer.isEmpty {
+                // 変換中なら buffer だけ削除
                 buffer.removeLast()
             } else if !log.isEmpty {
+                // 変換確定後なら log から 1 文字削除
                 log.removeLast()
+                lastLoggedIndex = log.endIndex   // 巻き戻し
             }
         }
     }
@@ -212,17 +221,7 @@ class KeyInputParser: ObservableObject {
         log += "\n"
         buffer = ""
     }
-    
-    
-    
 }
-
-
-
-
-
-import Cocoa
-import Carbon
 
 class KeyTapManager {
     private var eventTap: CFMachPort?
@@ -302,9 +301,8 @@ class KeyTapManager {
             eventTap = nil
         }
     }
-    
-    
 }
+
 
 
 
