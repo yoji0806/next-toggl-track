@@ -2,6 +2,15 @@ import Cocoa
 //KeyboardMonitor that recognizes keyboard + mousepad input
 
 
+
+// 非公開になった “textInput” (rawValue 29) を自前で定義     TODO: これ新しい推奨方法（があれば、）に変えたほうがいいかも
+    //CGEventType の 28 は非公開なので、macOS のメジャーアップデートで変更される可能性がある。
+    //　→ len == 0 を弾く + 受け取った文字列が Character.isASCII == false かで判定するの方が安全かも。
+
+extension CGEventType {
+    static let textInput = CGEventType(rawValue: 28)!       //メモ：　29はジェスチャ用なので、マウス/トラックパットを動かすと、文字化けした文字が大量にtextInputに追加される。
+}
+
 class KeyboardMonitor: NSObject {
 
     var textInput: InputText
@@ -51,9 +60,13 @@ class KeyboardMonitor: NSObject {
     private func handleCGEvent(type: CGEventType, cgEvent: CGEvent) {
         switch type {
         case .textInput:
-            var length: UniCharCount = 0
+            var length = 0
             var chars: [UniChar] = Array(repeating: 0, count: 256)
-            CGEventKeyboardGetUnicodeString(cgEvent, 256, &length, &chars)
+            cgEvent.keyboardGetUnicodeString(
+                maxStringLength: 256,
+                actualStringLength: &length,
+                unicodeString: &chars
+            )
             if length > 0 {
                 let str = String(utf16CodeUnits: chars, count: Int(length))
                 DispatchQueue.main.async {
