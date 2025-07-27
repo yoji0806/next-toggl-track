@@ -2,6 +2,19 @@ import Cocoa
 //KeyboardMonitor that recognizes keyboard + mousepad input
 
 
+
+// 非公開になった “textInput” (rawValue 29) を自前で定義     TODO: これ新しい推奨方法（があれば、）に変えたほうがいいかも
+    //CGEventType の 28 は非公開なので、macOS のメジャーアップデートで変更される可能性がある。
+    //　→ len == 0 を弾く + 受け取った文字列が Character.isASCII == false かで判定するの方が安全かも。
+    //
+    //　参考：https://developer.apple.com/documentation/coregraphics/cgevent?utm_source=chatgpt.com
+    //      10.10 以前の SDK には kCGEventTextInput (＝29) という別名もあり、「IME 変換確定文字列が 1 イベントとして届く」という説明が付いていました。
+    //      その後 Apple は “確定文字列は keyDown で keyboardGetUnicodeString() を呼んで取る” 方式を推奨に変更。
+    //      C 関数だった CGEventKeyboardGetUnicodeString は インスタンスメソッド keyboardGetUnicodeString に置き換えられ（Swift ではこちらのみ公開）ました。
+extension CGEventType {
+    static let textInput = CGEventType(rawValue: 28)!       //メモ：　29はジェスチャ用なので、マウス/トラックパットを動かすと、文字化けした文字が大量にtextInputに追加される。
+}
+
 class KeyboardMonitor: NSObject {
 
     var textInput: InputText
@@ -51,9 +64,13 @@ class KeyboardMonitor: NSObject {
     private func handleCGEvent(type: CGEventType, cgEvent: CGEvent) {
         switch type {
         case .textInput:
-            var length: UniCharCount = 0
+            var length = 0
             var chars: [UniChar] = Array(repeating: 0, count: 256)
-            CGEventKeyboardGetUnicodeString(cgEvent, 256, &length, &chars)
+            cgEvent.keyboardGetUnicodeString(
+                maxStringLength: 256,
+                actualStringLength: &length,
+                unicodeString: &chars
+            )
             if length > 0 {
                 let str = String(utf16CodeUnits: chars, count: Int(length))
                 DispatchQueue.main.async {
