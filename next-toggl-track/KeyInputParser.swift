@@ -15,24 +15,27 @@ class KeyInputParser: ObservableObject {
     @Published var buffer = ""
     @Published var log = ""
     @Published var inputMode: InputMode = .english
-    
+
     /// Queue for storing log lines before writing to disk
     ///  InputText.swift にも同じものはある。それぞれ別のファイルとして保存される。
     var logQueue: [String] = []
+    /// Text accumulated since the last flush
+    private var unflushedText: String = ""
     private var timer: Timer?
     
     init() {
         // Start timer to flush logs to disk every 10 seconds
         timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
-            let text = (self?.logQueue.joined(separator: "\n") ?? "") + "\n"
-            //TODO: うまく反映されない。以下のDispatchQueue.main.asyncでも同じ（この場合は、ファイルの内容が毎回必ず読み込まれているかも？）
-            self?.appendLog_parsed(eventType: "keyboard(scheduled batch)", content: text)
-        
-//            DispatchQueue.main.async {
-//                self?.appendLog_parsed(eventType: "keyboard(scheduled batch)", content: text)
-//            }
-//            
-            self?.flushLog_parsed()
+            guard let self = self else { return }
+
+            // Write keyboard input collected since the previous flush
+            if !self.unflushedText.isEmpty {
+                let text = self.unflushedText
+                self.appendLog_parsed(eventType: "keyboard(scheduled batch)", content: text)
+                self.unflushedText.removeAll()
+            }
+
+            self.flushLog_parsed()
         }
     }
     
@@ -161,6 +164,7 @@ class KeyInputParser: ObservableObject {
     func appendEnglish(_ char: String) {
         buffer += char
         log += char
+        unflushedText += char
     }
 
     func appendJapanese(_ char: String) {
@@ -173,6 +177,7 @@ class KeyInputParser: ObservableObject {
                 if let kana = romajiToKana[sub] {
                     buffer.removeSubrange(start...)
                     log += kana
+                    unflushedText += kana
                     return
                 }
             }
@@ -189,16 +194,21 @@ class KeyInputParser: ObservableObject {
             buffer.removeLast()
         } else if !log.isEmpty {
             log.removeLast()
+            if !unflushedText.isEmpty {
+                unflushedText.removeLast()
+            }
         }
     }
 
     func commitTab() {
         log += "⇥"
+        unflushedText += "⇥"
         buffer = ""
     }
 
     func commitEnter() {
         log += "\n"
+        unflushedText += "\n"
         buffer = ""
     }
     
