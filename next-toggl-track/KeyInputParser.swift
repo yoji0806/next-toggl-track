@@ -24,15 +24,16 @@ class KeyInputParser: ObservableObject {
     init() {
         // Start timer to flush logs to disk every 10 seconds
         timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
-            let text = (self?.logQueue.joined(separator: "\n") ?? "") + "\n"
-            //TODO: うまく反映されない。以下のDispatchQueue.main.asyncでも同じ（この場合は、ファイルの内容が毎回必ず読み込まれているかも？）
-            self?.appendLog_parsed(eventType: "keyboard(scheduled batch)", content: text)
-        
-//            DispatchQueue.main.async {
-//                self?.appendLog_parsed(eventType: "keyboard(scheduled batch)", content: text)
-//            }
-//            
-            self?.flushLog_parsed()
+            guard let self else { return }
+
+            // 直近のキーボード入力をバッチとしてログに追加
+            if !self.log.isEmpty {
+                self.appendLog_parsed(eventType: "keyboard(scheduled batch)", content: self.log)
+                self.log = ""
+            }
+
+            // 既にキューされているイベントをファイルに書き出し
+            self.flushLog_parsed()
         }
     }
     
