@@ -14,6 +14,14 @@
 		40156EC82E05971E0082B78D /* next_toggl_trackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40156EC72E05971E0082B78D /* next_toggl_trackTests.swift */; };
 		40156ED22E05971E0082B78D /* next_toggl_trackUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40156ED12E05971E0082B78D /* next_toggl_trackUITests.swift */; };
 		40156ED42E05971E0082B78D /* next_toggl_trackUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40156ED32E05971E0082B78D /* next_toggl_trackUITestsLaunchTests.swift */; };
+		4042EBEE2E492BB5000F3F6C /* ActivityDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042EBEC2E492BB5000F3F6C /* ActivityDataModel.swift */; };
+		4042EBEF2E492BB5000F3F6C /* ActivityLogColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042EBED2E492BB5000F3F6C /* ActivityLogColumn.swift */; };
+		4042EBF62E492BBD000F3F6C /* ActivityLogColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042EBF02E492BBD000F3F6C /* ActivityLogColumn.swift */; };
+		4042EBF72E492BBD000F3F6C /* ContextualTextColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042EBF12E492BBD000F3F6C /* ContextualTextColumn.swift */; };
+		4042EBF82E492BBD000F3F6C /* FileWebHistoryColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042EBF22E492BBD000F3F6C /* FileWebHistoryColumn.swift */; };
+		4042EBF92E492BBD000F3F6C /* FlowGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042EBF32E492BBD000F3F6C /* FlowGraphView.swift */; };
+		4042EBFA2E492BBD000F3F6C /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042EBF42E492BBD000F3F6C /* SidebarView.swift */; };
+		4042EBFD2E492BCB000F3F6C /* ActivityDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042EBFB2E492BCB000F3F6C /* ActivityDataModel.swift */; };
 		407561C52E11008C00DD4841 /* FileOpenMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407561C42E11008C00DD4841 /* FileOpenMonitor.swift */; };
 		4075B9282E0CDCEA00AF4494 /* Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4075B9272E0CDCEA00AF4494 /* Accessibility.swift */; };
 		4090A71F2E0CD5B400CBB957 /* FocusMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4090A71C2E0CD5B400CBB957 /* FocusMonitor.swift */; };
@@ -53,6 +61,14 @@
 		40156ED32E05971E0082B78D /* next_toggl_trackUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = next_toggl_trackUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		403E18502E101C01008502D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		403E18512E101C0E008502D7 /* next-toggl-trackDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "next-toggl-trackDebug.entitlements"; sourceTree = "<group>"; };
+		4042EBEC2E492BB5000F3F6C /* ActivityDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityDataModel.swift; path = Models/ActivityDataModel.swift; sourceTree = "<group>"; };
+		4042EBED2E492BB5000F3F6C /* ActivityLogColumn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityLogColumn.swift; path = Views/ActivityLogColumn.swift; sourceTree = "<group>"; };
+		4042EBF02E492BBD000F3F6C /* ActivityLogColumn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityLogColumn.swift; sourceTree = "<group>"; };
+		4042EBF12E492BBD000F3F6C /* ContextualTextColumn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextualTextColumn.swift; sourceTree = "<group>"; };
+		4042EBF22E492BBD000F3F6C /* FileWebHistoryColumn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileWebHistoryColumn.swift; sourceTree = "<group>"; };
+		4042EBF32E492BBD000F3F6C /* FlowGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowGraphView.swift; sourceTree = "<group>"; };
+		4042EBF42E492BBD000F3F6C /* SidebarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		4042EBFB2E492BCB000F3F6C /* ActivityDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityDataModel.swift; sourceTree = "<group>"; };
 		407561C42E11008C00DD4841 /* FileOpenMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileOpenMonitor.swift; sourceTree = "<group>"; };
 		4075B9272E0CDCEA00AF4494 /* Accessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accessibility.swift; sourceTree = "<group>"; };
 		4090A71C2E0CD5B400CBB957 /* FocusMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusMonitor.swift; sourceTree = "<group>"; };
@@ -110,6 +126,10 @@
 		40156EB42E05971C0082B78D /* next-toggl-track */ = {
 			isa = PBXGroup;
 			children = (
+				4042EBFC2E492BCB000F3F6C /* Models */,
+				4042EBF52E492BBD000F3F6C /* Views */,
+				4042EBEC2E492BB5000F3F6C /* ActivityDataModel.swift */,
+				4042EBED2E492BB5000F3F6C /* ActivityLogColumn.swift */,
 				403E18512E101C0E008502D7 /* next-toggl-trackDebug.entitlements */,
 				403E18502E101C01008502D7 /* Info.plist */,
 				4075B9292E0CE2D100AF4494 /* Utility */,
@@ -151,6 +171,26 @@
 				40156ED32E05971E0082B78D /* next_toggl_trackUITestsLaunchTests.swift */,
 			);
 			path = "next-toggl-trackUITests";
+			sourceTree = "<group>";
+		};
+		4042EBF52E492BBD000F3F6C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4042EBF02E492BBD000F3F6C /* ActivityLogColumn.swift */,
+				4042EBF12E492BBD000F3F6C /* ContextualTextColumn.swift */,
+				4042EBF22E492BBD000F3F6C /* FileWebHistoryColumn.swift */,
+				4042EBF32E492BBD000F3F6C /* FlowGraphView.swift */,
+				4042EBF42E492BBD000F3F6C /* SidebarView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		4042EBFC2E492BCB000F3F6C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4042EBFB2E492BCB000F3F6C /* ActivityDataModel.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		4075B9292E0CE2D100AF4494 /* Utility */ = {
@@ -292,13 +332,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				4090A71F2E0CD5B400CBB957 /* FocusMonitor.swift in Sources */,
+				4042EBEF2E492BB5000F3F6C /* ActivityLogColumn.swift in Sources */,
+				4042EBFA2E492BBD000F3F6C /* SidebarView.swift in Sources */,
 				4090A7212E0CD5B400CBB957 /* KeyboardMonitor.swift in Sources */,
 				4075B9282E0CDCEA00AF4494 /* Accessibility.swift in Sources */,
 				40156EB82E05971C0082B78D /* ContentView.swift in Sources */,
 				40156EB62E05971C0082B78D /* next_toggl_trackApp.swift in Sources */,
 				40E6D3B52E16A449001BC0A8 /* KeyInputParser.swift in Sources */,
+				4042EBF72E492BBD000F3F6C /* ContextualTextColumn.swift in Sources */,
+				4042EBF82E492BBD000F3F6C /* FileWebHistoryColumn.swift in Sources */,
+				4042EBFD2E492BCB000F3F6C /* ActivityDataModel.swift in Sources */,
 				407561C52E11008C00DD4841 /* FileOpenMonitor.swift in Sources */,
 				4090A7202E0CD5B400CBB957 /* InputText.swift in Sources */,
+				4042EBF92E492BBD000F3F6C /* FlowGraphView.swift in Sources */,
+				4042EBF62E492BBD000F3F6C /* ActivityLogColumn.swift in Sources */,
+				4042EBEE2E492BB5000F3F6C /* ActivityDataModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
