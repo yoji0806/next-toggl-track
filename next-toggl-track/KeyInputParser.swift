@@ -261,10 +261,10 @@ class KeyTapManager {
                     switch keyCode {
                     case 102: // 英数キー
                         inputBuffer.inputMode = .english
-                        print("🔤 切替: 英数モード")
+                        print("切替: 英数モード")
                     case 104: // かなキー
                         inputBuffer.inputMode = .japanese
-                        print("🈂️ 切替: 日本語モード")
+                        print("切替: 日本語モード")
                     case 36: inputBuffer.commitEnter()
                     case 49:
                         if inputBuffer.inputMode == .english {
@@ -305,14 +305,3 @@ class KeyTapManager {
 
 
 
-
-
-
-//
-//private func handleEvent(_ event: NSEvent) {
-//    let action = parseAction(from: event)
-//    DispatchQueue.main.async {
-//        self.textInput.data += action
-//        self.textInput.appendLog(eventType: String(describing: event.type), content: action)
-//    }
-//}
